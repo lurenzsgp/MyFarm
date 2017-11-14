@@ -4,15 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <GLUT/glut.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
-#include <vector> // la classe vector di STL
+#include <vector>
 
 #include "drawScene.h"
 #include "point3.h"
@@ -20,7 +12,6 @@
 #include "tractor.h"
 
 extern Tractor tractor;
-uint font_id = -1;
 extern int corn[150][150];
 extern int scrH, scrW;
 extern bool useWireframe;
@@ -395,7 +386,7 @@ void drawCornGround(int pos_x, float pos_y, int pos_z) {
     glPopMatrix();
 }
 
-void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW) {
+void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, int max) {
     // settiamo il viewport
     glViewport(0,0, scrW, scrH);
 
@@ -413,19 +404,15 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW) {
     // char punti[3];
     // sprintf(punti, "%d", punteggio);
 
-    char stringa_punti[] = "Raccolto: 0%";
+    char stringa_punti[23];
     char game_over[] = "TEMPO SCADUTO";
     char continuare[] = "Premi un <ESC> per uscire";
 
-    int distanzaMargine;
-    // if(punteggio >= 10)
-    // distanzaMargine = 75;
-    // else
-    distanzaMargine = 73;
+    sprintf(stringa_punti, "Raccolto: %dKg - %d%", f, f/max);
 
-    drawText(font, 255, 255, 255, stringa_punti, scrW/2-distanzaMargine, scrH/2+100);
-    drawText(font, 255, 255, 255, game_over, scrW/2-80, scrH/3+20);
-    drawText(font, 255, 255, 255, continuare, scrW/2-150, scrH/4+20);
+    drawText(font, 255, 255, 255, stringa_punti, scrW/2-80, scrH/2+100, false);
+    drawText(font, 255, 255, 255, game_over, scrW/2-90, scrH/3+20, false);
+    drawText(font, 255, 255, 255, continuare, scrW/2-130, scrH/4+20, false);
     glFinish();
 
     SDL_GL_SwapWindow(win);
@@ -433,65 +420,82 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW) {
 
 void drawText(TTF_Font *font, // font
     Uint8 R, Uint8 G, Uint8 B,// colore testo
-    char *text, int x, int y) { // testo e posizione
+    char *text, int x, int y, // testo e posizione
+    bool background ) {
 
     Uint32 rmask, gmask, bmask, amask;
     SDL_Color color={R,G,B};
-    SDL_Surface *screen;
+    // SDL_Surface *screen;
     SDL_Surface *text_surface;
     int Mode = GL_RGB;
-    GLuint TextureID = 0;
+    GLuint TextureID;
 
-    #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-        rmask = 0xff000000;
-        gmask = 0x00ff0000;
-        bmask = 0x0000ff00;
-        amask = 0x000000ff;
-    #else
-        rmask = 0x000000ff;
-        gmask = 0x0000ff00;
-        bmask = 0x00ff0000;
-        amask = 0xff000000;
-    #endif
+    // #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    //     rmask = 0xff000000;
+    //     gmask = 0x00ff0000;
+    //     bmask = 0x0000ff00;
+    //     amask = 0x000000ff;
+    // #else
+    //     rmask = 0x000000ff;
+    //     gmask = 0x0000ff00;
+    //     bmask = 0x00ff0000;
+    //     amask = 0xff000000;
+    // #endif
 
     if(!(text_surface=TTF_RenderText_Solid(font,text,color))) {
         //handle error here, perhaps print TTF_GetError at least
     } else {
-        screen = SDL_CreateRGBSurface(0, text_surface->w, text_surface->h, 32, rmask, gmask, bmask, amask);
-        SDL_BlitSurface(text_surface,NULL,screen,NULL);
+        // screen = SDL_CreateRGBSurface(0, text_surface->w, text_surface->h, 32, rmask, gmask, bmask, amask);
+        // SDL_BlitSurface(text_surface,NULL,screen,NULL);
+
+
+        if (background) {
+            glLineWidth(2);
+            glColor3f(0,0,0);
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(x-2, y-2);
+            glVertex2f(x + text_surface->w+2, y-2);
+            glVertex2f(x + text_surface->w+2, y + text_surface->h+2);
+            glVertex2f(x-2, y + text_surface->h+2);
+            glEnd();
+        }
 
         glEnable(GL_TEXTURE_2D);
+        glGenTextures(1, &TextureID);
         glBindTexture(GL_TEXTURE_2D, TextureID);
 
-        if(screen->format->BytesPerPixel == 4) {
+        if(text_surface->format->BytesPerPixel == 4) {
             Mode = GL_RGBA;
         }
 
-        glTexImage2D(GL_TEXTURE_2D, 0, Mode, screen->w, screen->h, 0, Mode, GL_UNSIGNED_BYTE, screen->pixels);
+        glTexImage2D(GL_TEXTURE_2D, 0, Mode, text_surface->w, text_surface->h, 0, Mode, GL_UNSIGNED_BYTE, text_surface->pixels);
+
+        glBindTexture(GL_TEXTURE_2D, TextureID);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glBegin(GL_QUADS);
-            glTexCoord2f(0, 0); glVertex3f(x, y, 0);
-            glTexCoord2f(1, 0); glVertex3f(x + screen->w, y, 0);
-            glTexCoord2f(1, 1); glVertex3f(x + screen->w, y + screen->h, 0);
-            glTexCoord2f(0, 1); glVertex3f(x, y + screen->h, 0);
+            glTexCoord2f(1, 0); glVertex3f(x, y, 0);
+            glTexCoord2f(1, 1); glVertex3f(x + text_surface->w, y, 0);
+            glTexCoord2f(0, 1); glVertex3f(x + text_surface->w, y + text_surface->h, 0);
+            glTexCoord2f(0, 0); glVertex3f(x, y + text_surface->h, 0);
         glEnd();
 
-
+        // glFinish();
         glDisable(GL_TEXTURE_2D);
         SDL_FreeSurface(text_surface);
-        SDL_FreeSurface(screen);
+        // SDL_FreeSurface(screen);
     }
 }
 
-void drawMinimap(int scrH, int scrW) {
+void drawMinimap(int scrH, int scrW, TTF_Font *font, int u) {
     /* calcolo delle coordinate reali dell'oggetto su minimappa */
     float minimap_posx;
     float minimap_posz;
     minimap_posx = ((50*tractor.px)/67) + 50 + 20;
     minimap_posz = ((50*tractor.pz)/67) + 50 + scrH-20-100;
+    char point[15];
 
     float minimap_cubex, minimap_cubez, pos_x, pos_z;
 
@@ -535,6 +539,10 @@ void drawMinimap(int scrH, int scrW) {
     glVertex2d(minimap_posx - 3, minimap_posz);
     glEnd();
 
+    sprintf(point, "Raccolto %dKg", u);
+
+    // scrivo la percentuale di frumento raccolto
+    drawText(font, 255, 255, 255, point, 20, scrH-20-100-42, true);
 }
 
 // setta le matrici di trasformazione in modo
@@ -562,9 +570,6 @@ void drawFrameBar(float fps) {
 }
 
 void drawForageBar(int forage, int MaxForage) {
-    char point[3];
-    // TTF_Font *font = TTF_OpenFont ("font/FreeSans.ttf", 10);
-
     glBegin(GL_QUADS);
     float y=scrH*forage/MaxForage;
     float ramp=forage/(float)MaxForage;
@@ -574,9 +579,6 @@ void drawForageBar(int forage, int MaxForage) {
     glVertex2d(10,y);
     glVertex2d(10,0);
     glEnd();
-
-    // sprintf(point, "%d", (int)y*100);
-    // drawText(font, 0, 0, 0, point, 10, y);
 }
 
 void drawTimeBar(int time, int MaxTime) {

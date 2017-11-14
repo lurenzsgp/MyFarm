@@ -3,13 +3,16 @@
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <GLUT/glut.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#endif
 
 #include "tractor.h"
 #include "drawScene.h"
@@ -41,6 +44,7 @@ int fpsNow=0; // quanti fotogrammi ho disegnato fin'ora nell'intervallo attuale
 Uint32 timeLastInterval=0; // quando e' cominciato l'ultimo intervallo
 Uint32 startTime; // = SDL_GetTicks();
 Uint32 endTime = 5000;
+TTF_Font *font;
 
 int corn[150][150];
 int MaxForage = 0;
@@ -209,7 +213,7 @@ void rendering(SDL_Window *win){
     drawTimeBar(SDL_GetTicks() - startTime, endTime);
 
     // disegna la minimappa in alto a destra
-    drawMinimap(scrH, scrW);
+    drawMinimap(scrH, scrW, font, forage);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
@@ -236,7 +240,6 @@ int main(int argc, char* argv[])
     Uint32 windowID;
     SDL_Joystick *joystick;
     static int keymap[Controller::NKEYS] = {SDLK_a, SDLK_d, SDLK_w, SDLK_s};
-    TTF_Font *font;
 
     // inizializzazione di SDL
     SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
@@ -447,6 +450,9 @@ int main(int argc, char* argv[])
                             case SDL_JOYBUTTONDOWN:
                             done = 1;
                             break;
+                            case SDL_QUIT:
+                            done = 1;
+                            break;
                             case SDL_WINDOWEVENT:
                             windowID = SDL_GetWindowID(win);
                             if (e.window.windowID == windowID) {
@@ -461,7 +467,8 @@ int main(int argc, char* argv[])
                             }
                         }
                     } else { // disegno la schermata di fine partita
-                        finalScreen(win, font, scrH, scrW);
+                        // finalScreen(win, font, scrH, scrW, forage, MaxForage);
+                        gameOver(win, font, scrH, scrW);
                     }
                 }
             }
@@ -472,6 +479,7 @@ int main(int argc, char* argv[])
 
     SDL_GL_DeleteContext(mainContext);
     SDL_DestroyWindow(win);
+    TTF_Quit();
     SDL_Quit ();
     return (0);
 }

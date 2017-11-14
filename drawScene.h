@@ -1,6 +1,16 @@
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#endif
 
 void drawAxis();
 void drawSphere(double r, int lats, int longs);
@@ -12,10 +22,10 @@ void drawFence();
 void drawCornBox(int pos_x, int pos_y, int pos_z);
 void drawCornGround(int pos_x, float pos_y, int pos_z);
 
-void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW);
+void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, int max);
 
-void drawText(TTF_Font *font, Uint8 R, Uint8 G, Uint8 B, char *text, int x, int y);
-void drawMinimap(int scrH, int scrW);
+void drawText(TTF_Font *font, Uint8 R, Uint8 G, Uint8 B, char *text, int x, int y, bool background);
+void drawMinimap(int scrH, int scrW, TTF_Font *font, int u);
 void  SetCoordToPixel(int scrW, int scrH);
 
 void drawFrameBar(float fps);

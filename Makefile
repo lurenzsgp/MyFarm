@@ -1,13 +1,22 @@
 # Project: MyFarm
 
+OS := $(shell uname)
+
 CPP  = g++
 CC   = gcc
 BIN  = myFarm
 
 OBJ  = main.o tractor.o mesh.o drawScene.o
 LINKOBJ  = main.o tractor.o mesh.o drawScene.o
-LIBS = -L/usr/X11R6/lib -framework OpenGL -framework GLUT  -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lm
-INCS = -I. -I/usr/X11R6/include -D_THREAD_SAFE  -I/usr/local/include/SDL2 -I/usr/local/Cellar -I/usr/local/Cellar/glew/2.1.0/include
+
+ifeq ($(OS), Darwin)
+	LIBS = -L/usr/X11R6/lib -framework OpenGL -framework GLUT  -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lm
+	INCS = -I. -I/usr/X11R6/include -D_THREAD_SAFE  -I/usr/local/include/SDL2 -I/usr/local/Cellar -I/usr/local/Cellar/glew/2.1.0/include
+else
+	LIBS = -L/usr/X11R6 -lGL -lGLU -lSDL2_image -lSDL2 -lSDL2_ttf -lm
+	INCS = -I. -I/usr/X11R6/include
+endif
+
 CXXINCS=#
 CXXFLAGS = $(CFLAGS)
 CFLAGS = $(INCS)
