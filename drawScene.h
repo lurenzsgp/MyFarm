@@ -12,7 +12,6 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 
-void drawAxis();
 void drawSphere(double r, int lats, int longs);
 void drawSky();
 void drawFloor();
@@ -24,7 +23,7 @@ void drawCornGround(int pos_x, float pos_y, int pos_z);
 
 void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, int max);
 
-void drawText(TTF_Font *font, Uint8 R, Uint8 G, Uint8 B, char *text, int x, int y, bool background);
+void drawText(TTF_Font *font, Uint8 fgR, Uint8 fgG, Uint8 fgB, Uint8 fgA, Uint8 bgR, Uint8 bgG, Uint8 bgB, Uint8 bgA, char *text, int x, int y, bool background);
 void drawMinimap(int scrH, int scrW, TTF_Font *font, int u);
 void  SetCoordToPixel(int scrW, int scrH);
 

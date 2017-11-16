@@ -61,8 +61,8 @@ void SetupEnvmapTexture()
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_GEN_S); // abilito la generazione automatica delle coord texture S e T
     glEnable(GL_TEXTURE_GEN_T);
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE , GL_SPHERE_MAP); // Env map
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE , GL_SPHERE_MAP);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE , GL_EYE_LINEAR); // Env map
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE , GL_EYE_LINEAR);
     glColor3f(1,1,1); // metto il colore neutro (viene moltiplicato col colore texture, componente per componente)
     glDisable(GL_LIGHTING); // disabilito il lighting OpenGL standard (lo faccio con la texture)
 }
@@ -138,7 +138,6 @@ void Tractor::DoStep(){
 
     // posizione = posizione + velocita * delta t (ma delta t e' costante)
     // limitazione dello spazio di movimento
-    // printf("x^2: %f, z: %f\n", pow(px,2), pz + vz);
     if (pow(px + vx, 2) < 3364) {
         if (pz + vz < -51) {
             if (pow(px + vx,2) > 38) px+=vx;
@@ -209,14 +208,13 @@ void Tractor::Init(){
 void Tractor::DrawHeadlight(float x, float y, float z, int lightN, bool useHeadlight) const{
     int usedLight=GL_LIGHT1 + lightN;
 
-    if(useHeadlight)
-    {
+    if(useHeadlight) {
         glEnable(usedLight);
 
         float col0[4]= {0.8,0.8,0.0,  1};
         glLightfv(usedLight, GL_DIFFUSE, col0);
 
-        float col1[4]= {0.5,0.5,0.0,  1};
+        float col1[4]= {1.0,1.0,0.0,  1};
         glLightfv(usedLight, GL_AMBIENT, col1);
 
         float tmpPos[4] = {x,y,z,  1}; // ultima comp=1 => luce posizionale
@@ -231,8 +229,9 @@ void Tractor::DrawHeadlight(float x, float y, float z, int lightN, bool useHeadl
         glLightf(usedLight,GL_CONSTANT_ATTENUATION,0);
         glLightf(usedLight,GL_LINEAR_ATTENUATION,1);
     }
-    else
-    glDisable(usedLight);
+    else {
+        glDisable(usedLight);
+    }
 }
 
 
@@ -280,7 +279,6 @@ void Tractor::RenderAllParts(bool usecolor) const{
     if (usecolor) glColor3f(1,0,0); // rosso
     fanali_back.RenderNxV();
 
-
     glPushMatrix();
     // disegna il volante
     glDisable(GL_LIGHTING);
@@ -315,7 +313,7 @@ void Tractor::RenderAllParts(bool usecolor) const{
 
         if (usecolor) glColor3f(.6,.6,.6);
         if (usecolor) SetupWheelTexture(wheelFR1.bbmin,wheelFR1.bbmax);
-        wheelFR1.RenderNxF();
+        wheelFR1.RenderNxV();
         glDisable(GL_TEXTURE_2D);
         if (usecolor) glColor3f(0.5,0.5,0.5);
         wheelFR2.RenderNxV();
@@ -334,7 +332,7 @@ void Tractor::RenderAllParts(bool usecolor) const{
 
         if (usecolor) glColor3f(.6,.6,.6);
         if (usecolor) SetupWheelTexture(wheelBR1.bbmin,wheelBR1.bbmax);
-        wheelBR1.RenderNxF();
+        wheelBR1.RenderNxV();
         glDisable(GL_TEXTURE_2D);
         if (usecolor) glColor3f(0.5,0.5,0.5);
         wheelBR2.RenderNxV();
@@ -348,14 +346,12 @@ void Tractor::RenderAllParts(bool usecolor) const{
 void Tractor::Render() const{
     // sono nello spazio mondo
 
-    //drawAxis(); // disegno assi spazio mondo
     glPushMatrix();
 
     glTranslatef(px,py,pz);
     glRotatef(facing, 0,1,0);
 
     // sono nello spazio MACCHINA
-    //drawAxis(); // disegno assi spazio macchina
 
     DrawHeadlight(-0.25,0.5,-2, 0, useHeadlight); // accendi faro sinistro
     DrawHeadlight(+0.25,0.5,-2, 1, useHeadlight); // accendi faro destro
@@ -373,5 +369,6 @@ void Tractor::Render() const{
 
         glEnable(GL_LIGHTING);
     }
+    glPopMatrix();
     glPopMatrix();
 }

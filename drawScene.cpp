@@ -33,38 +33,6 @@ Mesh scarecrow_dress((char *)"object/scarecrow_dress.obj");
 Mesh scarecrow_hands((char *)"object/scarecrow_hands.obj");
 Mesh scarecrow_hat((char *)"object/scarecrow_hat.obj");
 
-// disegna gli assi nel sist. di riferimento
-void drawAxis(){
-    const float K=0.10;
-    glColor3f(0,0,1);
-    glBegin(GL_LINES);
-    glVertex3f( -1,0,0 );
-    glVertex3f( +1,0,0 );
-
-    glVertex3f( 0,-1,0 );
-    glVertex3f( 0,+1,0 );
-
-    glVertex3f( 0,0,-1 );
-    glVertex3f( 0,0,+1 );
-    glEnd();
-
-    glBegin(GL_TRIANGLES);
-    glVertex3f( 0,+1  ,0 );
-    glVertex3f( K,+1-K,0 );
-    glVertex3f(-K,+1-K,0 );
-
-    glVertex3f( +1,   0, 0 );
-    glVertex3f( +1-K,+K, 0 );
-    glVertex3f( +1-K,-K, 0 );
-
-    glVertex3f( 0, 0,+1 );
-    glVertex3f( 0,+K,+1-K );
-    glVertex3f( 0,-K,+1-K );
-    glEnd();
-
-}
-
-
 void drawSphere(double r, int lats, int longs) {
     int i, j;
     glPushMatrix();
@@ -118,7 +86,6 @@ void drawSky() {
         glColor3f(1,1,1);
         glDisable(GL_LIGHTING);
 
-        //   drawCubeFill();
         drawSphere(100.0, 20, 20);
 
         glDisable(GL_TEXTURE_GEN_S);
@@ -224,14 +191,10 @@ void drawScarecrow () {
     glTranslatef(-0.4,3.75,0.1);
     glBegin(GL_QUADS);
     /* Front. */
-    glTexCoord2f(1.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(.5, 0.0, 0.0);
-    glTexCoord2f(0.0, 0.0);
-    glVertex3f(.5, .75, 0.0);
-    glTexCoord2f(1.0, 0.0);
-    glVertex3f(0.0, .75, 0.0);
+    glTexCoord2f(1.0, 1.0); glVertex3f(0.0, 0.0, 0.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(.5, 0.0, 0.0);
+    glTexCoord2f(0.0, 0.0); glVertex3f(.5, .75, 0.0);
+    glTexCoord2f(1.0, 0.0); glVertex3f(0.0, .75, 0.0);
     glEnd();
     glDisable(GL_TEXTURE_2D);
 
@@ -293,44 +256,28 @@ void drawCornBox(int pos_x, int pos_y, int pos_z) {
 
     glBegin(GL_QUADS);
     /* Front. */
-    glTexCoord2f(0.0, 0.3);
-    glVertex3f(0.0, 0.0, 1.0);
-    glTexCoord2f(.5, 0.3);
-    glVertex3f(1.0, 0.0, 1.0);
-    glTexCoord2f(.5, 1.0);
-    glVertex3f(1.0, 2.0, 1.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(0.0, 2.0, 1.0);
+    glTexCoord2f(0.0, 0.3); glVertex3f(0.0, 0.0, 1.0);
+    glTexCoord2f(0.5, 0.3); glVertex3f(1.0, 0.0, 1.0);
+    glTexCoord2f(0.5, 1.0); glVertex3f(1.0, 2.0, 1.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(0.0, 2.0, 1.0);
 
     /* Back. */
-    glTexCoord2f(0.0, 0.3);
-    glVertex3f(0.0, 2.0, 0.0);
-    glTexCoord2f(.5, 0.3);
-    glVertex3f(1.0, 2.0, 0.0);
-    glTexCoord2f(.5, 1.0);
-    glVertex3f(1.0, 0.0, 0.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
+    glTexCoord2f(0.0, 0.3); glVertex3f(0.0, 2.0, 0.0);
+    glTexCoord2f(0.5, 0.3); glVertex3f(1.0, 2.0, 0.0);
+    glTexCoord2f(0.5, 1.0); glVertex3f(1.0, 0.0, 0.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(0.0, 0.0, 0.0);
 
     /* SideLeft. */
-    glTexCoord2f(0.0, 0.3);
-    glVertex3f(0.0, 2.0, 0.0);
-    glTexCoord2f(.5, 0.3);
-    glVertex3f(0.0, 2.0, 1.0);
-    glTexCoord2f(.5, 1.0);
-    glVertex3f(0.0, 0.0, 1.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
+    glTexCoord2f(0.0, 0.3); glVertex3f(0.0, 2.0, 0.0);
+    glTexCoord2f(0.5, 0.3); glVertex3f(0.0, 2.0, 1.0);
+    glTexCoord2f(0.5, 1.0); glVertex3f(0.0, 0.0, 1.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(0.0, 0.0, 0.0);
 
     /* SideRight. */
-    glTexCoord2f(0.0, 0.3);
-    glVertex3f(1.0, 2.0, 0.0);
-    glTexCoord2f(.5, 0.3);
-    glVertex3f(1.0, 2.0, 1.0);
-    glTexCoord2f(.5, 1.0);
-    glVertex3f(1.0, 0.0, 1.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(1.0, 0.0, 0.0);
+    glTexCoord2f(0.0, 0.3); glVertex3f(1.0, 2.0, 0.0);
+    glTexCoord2f(0.5, 0.3); glVertex3f(1.0, 2.0, 1.0);
+    glTexCoord2f(0.5, 1.0); glVertex3f(1.0, 0.0, 1.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(1.0, 0.0, 0.0);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
@@ -344,14 +291,10 @@ void drawCornBox(int pos_x, int pos_y, int pos_z) {
 
     glBegin(GL_QUADS);
     /* Up. */
-    glTexCoord2f(0.0, 0.0);
-    glVertex3f(0.0, 2.0, 1.0);
-    glTexCoord2f(1.0, 0.0);
-    glVertex3f(1.0, 2.0, 1.0);
-    glTexCoord2f(1.0, 1.0);
-    glVertex3f(1.0, 2.0, 0.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(0.0, 2.0, 0.0);
+    glTexCoord2f(0.0, 0.0); glVertex3f(0.0, 2.0, 1.0);
+    glTexCoord2f(1.0, 0.0); glVertex3f(1.0, 2.0, 1.0);
+    glTexCoord2f(1.0, 1.0); glVertex3f(1.0, 2.0, 0.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(0.0, 2.0, 0.0);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
@@ -371,15 +314,11 @@ void drawCornGround(int pos_x, float pos_y, int pos_z) {
 
     // disegna KxK quads
     glBegin(GL_QUADS);
-        glNormal3f(0,1,0);
-        glTexCoord2f(0.0, 0.0);
-        glVertex3d(0, 0, 0);
-        glTexCoord2f(1.0, 0.0);
-        glVertex3d(1.0, 0, 0);
-        glTexCoord2f(1.0, 1.0);
-        glVertex3d(1.0, 0, 1.0);
-        glTexCoord2f(0.0, 1.0);
-        glVertex3d(0, 0, 1.0);
+    glNormal3f(0,1,0);
+    glTexCoord2f(0.0, 0.0);glVertex3d(0, 0, 0);
+    glTexCoord2f(1.0, 0.0);glVertex3d(1.0, 0, 0);
+    glTexCoord2f(1.0, 1.0);glVertex3d(1.0, 0, 1.0);
+    glTexCoord2f(0.0, 1.0);glVertex3d(0, 0, 1.0);
     glEnd();
     glDisable(GL_TEXTURE_2D);
 
@@ -391,7 +330,7 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
     glViewport(0,0, scrW, scrH);
 
     // colore di sfondo (fuori dal mondo)
-    glClearColor(0,0,0,1);
+    glClearColor(.1,.1,.1,1);
 
     // riempe tutto lo screen buffer di pixel color sfondo
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -400,92 +339,88 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
 
     glLineWidth(2);
 
-    // conversione della variabile punteggio
-    // char punti[3];
-    // sprintf(punti, "%d", punteggio);
-
     char stringa_punti[23];
     char game_over[] = "TEMPO SCADUTO";
     char continuare[] = "Premi un <ESC> per uscire";
 
     sprintf(stringa_punti, "Raccolto: %dKg - %d%", f, f/max);
 
-    drawText(font, 255, 255, 255, stringa_punti, scrW/2-80, scrH/2+100, false);
-    drawText(font, 255, 255, 255, game_over, scrW/2-90, scrH/3+20, false);
-    drawText(font, 255, 255, 255, continuare, scrW/2-130, scrH/4+20, false);
+    drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, stringa_punti, scrW/2-80, scrH/2+100, false);
+    drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, game_over, scrW/2-90, scrH/3+20, false);
+    drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, continuare, scrW/2-130, scrH/4+20, false);
     glFinish();
 
     SDL_GL_SwapWindow(win);
 }
 
 void drawText(TTF_Font *font, // font
-    Uint8 R, Uint8 G, Uint8 B,// colore testo
+    Uint8 fgR, Uint8 fgG, Uint8 fgB, Uint8 fgA, // colore testo
+    Uint8 bgR, Uint8 bgG, Uint8 bgB, Uint8 bgA, // colore background
     char *text, int x, int y, // testo e posizione
-    bool background ) {
+    bool border ) {
 
     Uint32 rmask, gmask, bmask, amask;
-    SDL_Color color={R,G,B};
-    // SDL_Surface *screen;
+    SDL_Color fontcolor = {fgR,fgG,fgB,fgA};
+    SDL_Color bgcolor = {bgR, bgG, bgB, bgA};
     SDL_Surface *text_surface;
-    int Mode = GL_RGB;
-    GLuint TextureID;
+    SDL_Surface *screen;
+    uint TextureID = -1;
 
-    // #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    //     rmask = 0xff000000;
-    //     gmask = 0x00ff0000;
-    //     bmask = 0x0000ff00;
-    //     amask = 0x000000ff;
-    // #else
-    //     rmask = 0x000000ff;
-    //     gmask = 0x0000ff00;
-    //     bmask = 0x00ff0000;
-    //     amask = 0xff000000;
-    // #endif
-
-    if(!(text_surface=TTF_RenderText_Solid(font,text,color))) {
+    if(!(text_surface = TTF_RenderText_Shaded(font, text, fontcolor, bgcolor))){
         //handle error here, perhaps print TTF_GetError at least
     } else {
-        // screen = SDL_CreateRGBSurface(0, text_surface->w, text_surface->h, 32, rmask, gmask, bmask, amask);
-        // SDL_BlitSurface(text_surface,NULL,screen,NULL);
+        #if SDL_BYTEORDER == SDL_BIG_ENDIAN
+        rmask = 0xff000000;
+        gmask = 0x00ff0000;
+        bmask = 0x0000ff00;
+        amask = 0x000000ff;
+        #else
+        rmask = 0x000000ff;
+        gmask = 0x0000ff00;
+        bmask = 0x00ff0000;
+        amask = 0xff000000;
+        #endif
+        /* Allochiamo una nuova surface RGB */
+        screen = SDL_CreateRGBSurface(0, text_surface->w, text_surface->h, 32,rmask, gmask, bmask, amask);
 
+        /* Copiamo il contenuto dalla prima alla seconda surface */
+        SDL_BlitSurface(text_surface, 0, screen, 0);
 
-        if (background) {
-            glLineWidth(2);
-            glColor3f(0,0,0);
-            glBegin(GL_LINE_LOOP);
-            glVertex2f(x-2, y-2);
-            glVertex2f(x + text_surface->w+2, y-2);
-            glVertex2f(x + text_surface->w+2, y + text_surface->h+2);
-            glVertex2f(x-2, y + text_surface->h+2);
-            glEnd();
-        }
-
-        glEnable(GL_TEXTURE_2D);
-        glGenTextures(1, &TextureID);
+        /* Informiamo GL della nuova texture */
         glBindTexture(GL_TEXTURE_2D, TextureID);
-
-        if(text_surface->format->BytesPerPixel == 4) {
-            Mode = GL_RGBA;
-        }
-
-        glTexImage2D(GL_TEXTURE_2D, 0, Mode, text_surface->w, text_surface->h, 0, Mode, GL_UNSIGNED_BYTE, text_surface->pixels);
-
-        glBindTexture(GL_TEXTURE_2D, TextureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, 4, text_surface->w, text_surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels );
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+        if (border) {
+            glLineWidth(2);
+            glColor3f(0,0,0);
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(x-2, y-2);
+            glVertex2f(x + screen->w+2, y-2);
+            glVertex2f(x + screen->w+2, y + screen->h+2);
+            glVertex2f(x-2, y + screen->h+2);
+            glEnd();
+        }
+
+        /* prepariamoci al rendering del testo */
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, TextureID);
+        glColor3f(1.0f, 1.0f, 1.0f);
+
         glBegin(GL_QUADS);
-            glTexCoord2f(1, 0); glVertex3f(x, y, 0);
-            glTexCoord2f(1, 1); glVertex3f(x + text_surface->w, y, 0);
-            glTexCoord2f(0, 1); glVertex3f(x + text_surface->w, y + text_surface->h, 0);
-            glTexCoord2f(0, 0); glVertex3f(x, y + text_surface->h, 0);
+            glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
+            glTexCoord2f(1.0f, 1.0f); glVertex2f(x + screen->w, y);
+            glTexCoord2f(1.0f, 0.0f); glVertex2f(x + screen->w, y + screen->h);
+            glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y + screen->h);
         glEnd();
 
-        // glFinish();
+        /* Clean up */
         glDisable(GL_TEXTURE_2D);
         SDL_FreeSurface(text_surface);
-        // SDL_FreeSurface(screen);
+        SDL_FreeSurface(screen);
+        glDeleteTextures(1, &TextureID);
     }
 }
 
@@ -539,15 +474,16 @@ void drawMinimap(int scrH, int scrW, TTF_Font *font, int u) {
     glVertex2d(minimap_posx - 3, minimap_posz);
     glEnd();
 
+
     sprintf(point, "Raccolto %dKg", u);
 
     // scrivo la percentuale di frumento raccolto
-    drawText(font, 255, 255, 255, point, 20, scrH-20-100-42, true);
+    drawText(font, 255, 255, 255, 255, 0, 0, 0, 0, point, 20, scrH-20-100-42, true);
 }
 
 // setta le matrici di trasformazione in modo
 // che le coordinate in spazio oggetto siano le coord
-// del pixel sullo schemo
+// del pixel sullo schermo
 void  SetCoordToPixel(int scrW, int scrH){
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

@@ -24,6 +24,7 @@
 #define CAMERA_MOUSE 4
 #define CAMERA_TYPE_MAX 5
 
+
 float viewAlpha=20, viewBeta=40; // angoli che definiscono la vista
 float eyeDist=5.0; // distanza dell'occhio dall'origine
 int scrH=750, scrW=750; // altezza e larghezza viewport (in pixels)
@@ -43,7 +44,7 @@ float fps=0; // valore di fps dell'intervallo precedente
 int fpsNow=0; // quanti fotogrammi ho disegnato fin'ora nell'intervallo attuale
 Uint32 timeLastInterval=0; // quando e' cominciato l'ultimo intervallo
 Uint32 startTime; // = SDL_GetTicks();
-Uint32 endTime = 5000;
+Uint32 endTime = 60000;
 TTF_Font *font;
 
 int corn[150][150];
@@ -233,8 +234,7 @@ void redraw(){
     SDL_PushEvent(&e);
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     SDL_Window *win;
     SDL_GLContext mainContext;
     Uint32 windowID;
@@ -467,8 +467,7 @@ int main(int argc, char* argv[])
                             }
                         }
                     } else { // disegno la schermata di fine partita
-                        // finalScreen(win, font, scrH, scrW, forage, MaxForage);
-                        gameOver(win, font, scrH, scrW);
+                        finalScreen(win, font, scrH, scrW, forage, MaxForage);
                     }
                 }
             }
@@ -479,6 +478,7 @@ int main(int argc, char* argv[])
 
     SDL_GL_DeleteContext(mainContext);
     SDL_DestroyWindow(win);
+    TTF_CloseFont(font);
     TTF_Quit();
     SDL_Quit ();
     return (0);
