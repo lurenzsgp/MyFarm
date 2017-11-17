@@ -53,8 +53,8 @@ body, html {
   </div>
 </header>
 
-<!-- Add a background color and large text to the whole page -->
-<div class="w3-sand w3-grayscale w3-large">
+<!-- justified text -->
+<div style='text-align:justify'>
 
 <!-- About Container -->
 <div class="w3-container" id="about">
@@ -131,24 +131,77 @@ body, html {
     <p>Il granoturco &egrave; rappresentato similarmente. Un singolo blocco di granoturco consiste in un parallelepipedo a cui sono applicate 2 textures diverse. Una per i lati e una per la faccia superiore del solido. Le 2 texture sono sempre applicate manualmente mappando le immagini sul solido.</br>
     Una terza texture &egrave; utilizzata per disegnare il terreno brullo che sostituisce il granoturco raccolto. Anche in questo caso viene disegnato un quad a cui viene assegnata manualmente la texture. Per evitare problemi di visualizzazione questo quad &egrave; situato ad un altezza leggermente superiore dell'erba.</p>
     <img src="img/corn.png" style="width:100%;max-width:1000px;margin-top:32px;">
-    <p>Una volta generato un blocco, questo &egrave; disegnato ripetutamente della scena in posizioni diverse. Una matrice, con dimensioni pari al numero di quads di terreno disegnati memorizza un intero che pu&ograve; essere 0, 1 o 2.  </p>
+    <p>Una volta generato un blocco, questo &egrave; disegnato ripetutamente della scena in posizioni diverse. Una matrice, con dimensioni pari al numero di quads di terreno disegnati, memorizza un intero che pu&ograve; essere 0, 1 o 2. In base al numero memorizzato il metodo drawFloor disegner&agrave; nella posizione corrente sar&agrave; disegnata solo erba, erba pi&ugrave; mais (drawCornBox) o erba e terra brulla (drawCornGround). Questa matrice &egrave; inizializzata prima del ciclo degli eventi, ma volendo potrebbe essere inizializzata da file rendendo la disposizione del granoturco pi&ugrave; artistica e fantasiosa.</br>
+    La funzione DoStep aggiorna, ad ogni movimento del trattore, la matrice e in questo modo il granoturco &egrave; automaticamente distrutto e sostituito dalla terra brulla.</p>
 
-    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">INTRODUZIONE</span></h5>
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Il Cielo</span></h5>
+    <p>I metodi drawSphere e drawSky si occupano del rendering dello sfondo. Il primo genera una sfera a cui viene applicata una texture a tema cielo con il secondo metodo. Quando la modalit&agrave; wireframe &egrave; attiva la visualizzazione del cielo cambia e tramite il metodo glPolygonMode e il parametro GL_LINE si rappresenta il cielo utilizzado righe nere e facce bianche.</p>
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Fattoria, Staccionata e Spaventa passeri</span></h5>
+    <p>Questi tre elementi insieme all'erba e al granoturco completano la scena. Il primo, la fattoria, &egrave; una mesh scaricata da internet e poi divisa in diversi file obj per poter disegnare i diversi dettagli con colori diversi. Consiste in una mesh composta da pochi poligoni in cui si distinduono il tetto, il segnavento sul tetto, una trave, il portone e le finestre. Tutti questi elementi sono stati generati utilizzando colori opachi salvo le finestre per le quali si &egrave; creato un effetto trasparenza. Questo &egrave; possibile utilizzando GL_BLEND, GL_ALPHA e aggiungendo il parametro alpha al colore scelto. In questo modo inserendo un valore alpha vicino a 0 &egrave; possibile simulare un effetto vetro.</br>
+    La staccionata &egrave; anchessa disegnata attraverso l'uso di una mesh. Questa &egrave; stata generata in Blender partendo da un singolo elemento e duplicandolo, con il modificatore vettore, fino a raggiungere la lunghezza desiderata di 60 metri. Questi blocchi da 60 metri di staccionata sono stati posizionati con le funzioni glTranslate e glRotate a comporre un quadrato di dimensione 120m x 120m attorno all'origine.</br>
+    Lo spaventa passeri &egrave; sempre generato da una mesh presa online e posizionato con la funzione glTranslate all'esterno della staccionata. Al posto della faccia, sotto al cappello &egrave; presente un rettangolo su cui &egrave; stata applicata la mia faccia settando le cordinate della texture manualmente.</p>
+    <img src="img/barn.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <p>La staccionata definisce i limiti dell'area di gioco. Nella funzione DoStep, all'aggiornamento della posizione del trattore, si verifica che le mesh del trattore non entri in collisione con la staccionata o la fattoria. Questo controllo &egrave; semplicemente implementato controllando che la posione del trattore sia inclusa in un range che coincide con lo spazio all'interno del recinto unito alla fattoria.</p>
+    <img src="img/farm.png" style="width:100%;max-width:1000px;margin-top:32px;">
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Illuminazione</span></h5>
+    <p>La scena è illuminata da una luce dichiarata nel main come GL_LIGHT0 e definita nel metodo rendering. Si tratta di una luce puntiforme posizionata in un punto fisso che illumina la scena dall'alto. I raggi luminosi emessi si diffondono in tutte le direzioni. Il tipo di luce emesso da LIGHT0 &egrave; definita da un vettore RGBA, che nel nostro caso &egrave; uguale a (0,1,2,0). Oltre a questa luce sono presenti altre due sorgenti luminose, montate sul trattore a simulare i fanali anteriori. Di esse sono state settati i parametri GL_DIFFUSE, GL_AMBIENT, GL_SPOT_DIRECTION, GL_SPOT_CUTOFF, GL_SPOT_EXPONENT, GL_CONSTANT_ATTENUATION e GL_LINEAR_ATTENUATION per definire la direzione della luce, la sua intensit&agrave; la sua attenuazione e tutte le loro caratteristiche.</p>
+    <img src="img/light.png" style="width:100%;max-width:1000px;margin-top:32px;">
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">L'Ombra</span></h5>
+    <p>L'ombra &egrave; una funzione attivabile attiva solo sul trattore. Essa non fa altro che disegnare la mesh del trattore, scalata fino ad essere piatta, sopra al terreno. La funzione glScale ci permette di ridimensionare e appiattire la mesh, mentre attraverso il parametro usecolor si controlla il colore del trattore, che per default &egrave; settato a nero.</p>
     <p></p>
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Telecamera</span></h5>
+    <p>Il metodo setCamera si occupa di modificare, con uno switch, i parametri di vista dell'utente che sono successivamente passati al metodo gluLookAt. Sono disponibili 5 modalit&agrave; diverse.
+        <ul>
+            <li>CAMERA_BACK_CAR mostra la scena da dietro il trattore.</li>
+            <li>CAMERA_TOP_FIXED posiziona la telecamera affianco alla ruota anteriore sinistra, ma ruotata verso la cabina del trattore, fornendo una vista fissa sul veicolo.</li>
+            <li>CAMERA_TOP_CAR fornisce una visuale da dietro e sopra del trattore.</li>
+            <li>CAMERA_PILOT mostra la scena da dentro la cabina.</li>
+            <li>CAMERA_MOUSE la camera guarda fissa l'origine della scena, ma con l'utilizzo del mouse &egrave; possibile ruotare la visuale e avvicinarsi o allontanarsi. Questo è reso possibile grazie alle operazioni di glTranslate e glRotate sui parametri eyeDist, viewBeta e viewAlpha</li>
+        </ul>
+    </p>
+    <img src="img/camera.png" style="width:100%;max-width:1000px;margin-top:32px;">
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Interfaccia</span></h5>
+    <p>Per progettare l'interfaccia di gioco è stato necessario settare le matrici di trasformazione sullo spazio 2D, in modo che si disegni direttamente sulle coordinate dei pixel dello schermo. Questo è stato possibile grazie al metodo SetCoordToPixel che imposta correttamente le matrici di proiezione e di trasformazione prima di disegnare a schermo usando nuovamente le primitive OpenGL.
+    L' interfaccia &egrave; composta da diversi elementi:
+        <ul>
+            <li>Barre Laterali - Tre barre colorate che mostrano fps, tempo e raccolto. Sono state realizzate tramire GL_QUADS, variando la loro posizione lungo l'asse x e la loro altezza proporzionalmente con i valori che devono mostrare. I colori dipendono dal valore attuale del dato rappresentato.</li>
+            <li>Minimappa - In alto a sinistra è stata posizionata una minimappa su cui sono disegnati in blu il trattore e in rosso le posizioni del granoturca da raccogliere. La posizione di questi elementi viene calcolata come semplice trasposizione dalle coordinate reali di essi nella scena. Mentre per disegnare la mappa &egrave; stata acora usata GL_QUADS gli elementi di essa sono rappresentati con GL_POINTS. Questa scelta &egrave; stata forzata dal grande nnumero di elementi da rappresentare nel poco spazio.</li>
+            <li>Raccolto - Accanto alla minimappa è stato posto un testo raffigurante il raccolto attuale. Per realizzarlo è stata sfruttata la libreria SDL_TTF. Per utilizzare questa libreria &egrave; stato necessario inizializzarla tramite il comando TTF_Init nel main e caricare un font adeguato per la scrittura di testo (FreeSans.ttf). Siccome per poter scrivere su schermo in concomitanza con OpenGL, TTF non mette a disposizione una primitiva che permette una scrittura immediata in una certa posizione, &egrave; stata implementata la funzione drawText. Questa genera una SDL_Surface, su cui &egrave; scritto il testo, che viene trasformata in texture e applicata a un rettangolo generato nella posizione voluta.
+            </li>
+        </ul>
+    </p>
     <p></p>
-    <!-- <img src="img/interface.png" style="width:100%;max-width:1000px;margin-top:32px;"> -->
+    <img src="img/minimap.png" style="width:100%;max-width:1000px;margin-top:32px;">
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Scherata Finale</span></h5>
+    <p>Dopo 1 minuto di gioco il tempo termina e e viene attivato un nuovo ciclo degli eventi. A questo punto la scena scompare e viene mostrata la schermata di fine gioco con le informazioni riguardo il raccolto e le informazioni per uscire. In questo ciclo sono controllati unicamente gli eventi di tipo SDL_KEYDOWN, SDL_JOYBUTTONDOWN, SDL_QUIT e SDL_WINDOWEVENT. Il primi 3 sono usati, appunto, per garantire un'uscita sicura dal ciclo, mentre l'ultimo serve a mantenere il testo centrato anche in caso di modifica delle dimensioni della finestra di gioco. La funzione finalScreen si occupa di preparare la schermata finale, disegnado le scritte sulle cordinate 2D della finestra.</p>
+    <img src="img/final_screen.png" style="width:100%;max-width:1000px;margin-top:32px;">
+  </div>
+</div>
+
+<div class="w3-container" id="classi">
+  <div class="w3-content" style="max-width:700px">
+    <h3 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">CLASSI POINT3 E MESH</span></h3>
+    <p>La classe Point3, definita nel file point3.h, implementa il concetto di "punto in tre dimensioni" e contiene i metodi di base per operare con questi oggetti e, per questo scopo, sone stati ridefiniti la maggior parte degli operatori di base su di essi. Alla fine del file, viene creato un alias Vector3 per Point3 utilizzato col fine di distinguere semanticamente fra punti e vettori.</br>
+    La classe Mesh, invece, definita nel file mesh.h e implementata in mesh.cpp, contiene in realtà la definizione di quattro classi differenti: Vertex, Edge, Face e Mesh. Di particolare importanza &egrave; la classe Mesh che permette il caricamento di un file obj da file andando ad analizzare i tag e i valori presenti all'interno dell'obj stesso, per poi computare le normali per vertice e le normali per faccia, che garantiscono una determinata resa dell'oggetto caricato. </p>
   </div>
 </div>
 
 <div class="w3-container" id="end" style="padding-bottom:32px;">
   <div class="w3-content" style="max-width:700px">
     <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">CONCLUSIONI</span></h3>
-    <p>Find us at some address at some place.</p>
-    <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
-    <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
+    <p>Il completamento di questo progetto necissitava di comprendere il funzionamento di OpenGL oltre che ai concetti di matrice di modellazione e proiezione. L'utilizzo di tale libreria e di SDL2 &egrave; stato soprattutto possibile grazie alla documentazione online e agli esempi visti e forniti durante il corso. </br>
+    Le maggiori difficolt&agrave; sono state incontrate nella fase iniziale di studio del progetto base, dal quale si &egrave; iniziato sostituendo le mesh del veicolo. Una volta consolidate le dinamiche necessarie per il disegno, traslazione e rotazione delle geometrie si sono affrontate le difficolt&agrave; insite nelle applicazioni delle texture. La difficolt&agrave maggiore &egrave; stata incontrata nella creazione di una funzione che scrivesse il testo a video, ma dopo giorni di debugging si &egrave; riuscito a superare anche questo problema.</br>
+    Meno difficili sono state le fasi di modellazione 3D necessarie per la generazione delle mesh da importare nella scena. Questo solo per il fatto che ero gi&agrave; a conoscenza del funzionamento di Blender.</br>
+    Alla fine di questo progetto &egrave; stato generato un gioco coinvolgente con una scena piena e colorata che soddisfa tutte le richieste grafiche richieste inizialmente dal progetto.
+</p>
   </div>
 </div>
-
 <!-- End page content -->
 </div>
 

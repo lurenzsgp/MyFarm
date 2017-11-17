@@ -438,7 +438,6 @@ int main(int argc, char* argv[]) {
                 rendering(win);
 
             if (SDL_GetTicks() - startTime > endTime) {
-                // done = 1;
                 done = 0;
                 while (!done) {
                     SDL_Event e;

@@ -353,13 +353,13 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
 
     glLineWidth(2);
 
-    char stringa_punti[23];
+    char stringa_punti[26];
     char game_over[] = "TEMPO SCADUTO";
     char continuare[] = "Premi un <ESC> per uscire";
 
-    sprintf(stringa_punti, "Raccolto: %dKg - %d%", f, f/max);
+    sprintf(stringa_punti, "Raccolto: %dKg su %d", f, max);
 
-    drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, stringa_punti, scrW/2-80, scrH/2+100, false);
+    drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, stringa_punti, scrW/2-115, scrH/2+100, false);
     drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, game_over, scrW/2-90, scrH/3+20, false);
     drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, continuare, scrW/2-130, scrH/4+20, false);
     glFinish();
