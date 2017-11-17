@@ -190,10 +190,10 @@ void rendering(SDL_Window *win){
     //drawCubeWire();
 
     drawSky(); // disegna il cielo come sfondo
-    drawFloor(); // disegna il suolo
     drawBarn(); // disegna la fattoria
     drawFence(); // disegna la staccionata
     drawScarecrow (); // disegna lo spaventapasseri
+    drawFloor(); // disegna il suolo
 
 
 
@@ -207,14 +207,14 @@ void rendering(SDL_Window *win){
 
     // disegnamo i fps (frame x sec) come una barra a sinistra.
     // (vuota = 0 fps, piena = 100 fps)
-    SetCoordToPixel(scrW, scrW);
+    SetCoordToPixel(scrW, scrH);
 
     drawFrameBar(fps);
     drawForageBar(forage, MaxForage);
     drawTimeBar(SDL_GetTicks() - startTime, endTime);
 
     // disegna la minimappa in alto a destra
-    drawMinimap(scrH, scrW, font, forage);
+    drawMinimap(font, forage);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
@@ -336,7 +336,7 @@ int main(int argc, char* argv[]) {
                                 scrH = e.window.data2;
                                 glViewport(0,0,scrW,scrH);
                                 rendering(win);
-                                //redraw(); // richiedi ridisegno
+                                // redraw(); // richiedi ridisegno
                                 break;
                             }
                         }

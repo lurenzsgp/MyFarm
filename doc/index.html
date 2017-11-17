@@ -29,13 +29,13 @@ body, html {
       <a href="#" class="w3-button w3-block w3-black">HOME</a>
     </div>
     <div class="w3-col s3">
-      <a href="#about" class="w3-button w3-block w3-black">ABOUT</a>
-    </div>
-    <div class="w3-col s3">
       <a href="#intro" class="w3-button w3-block w3-black">INTRO</a>
     </div>
     <div class="w3-col s3">
-      <a href="#target" class="w3-button w3-block w3-black">TARGET</a>
+      <a href="#implementation" class="w3-button w3-block w3-black">IMPLEMENTATION</a>
+    </div>
+    <div class="w3-col s3">
+      <a href="#end" class="w3-button w3-block w3-black">CONCLUSION</a>
     </div>
   </div>
 </div>
@@ -59,7 +59,7 @@ body, html {
 <!-- About Container -->
 <div class="w3-container" id="about">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT MY FARM</span></h5>
+    <h3 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT MY FARM</span></h3>
     <p>MyFarm è un videogioco 3D in terza persona interamente sviluppato in C++ mediante l'ausilio delle librerie OpenGL ed SDL in ambiente *nix come progetto finale per il corso di Grafica tenutosi nell'anno 2015/2016 dal prof. Giulio Casciola presso l'Università Alma Mater degli Studi di Bologna.
     In questo sito web sono presentati gli step che hanno permesso la creazione di MyFarm. Particolare attenzione sar&egrave; data alle funzioni utilizzate per la creazione degli oggetti nella scena, della scenografia, dell'illuminazione, nonché delle texture che sono state impiegate. </p>
     <!-- <div class="w3-panel w3-leftbar w3-light-grey">
@@ -73,7 +73,7 @@ body, html {
 <!-- Intro Container -->
 <div class="w3-container" id="intro">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">INTRODUZIONE</span></h5>
+    <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">INTRODUZIONE</span></h3>
     <p> Il progetto MyFarm si ispira al progetto Car mostrato a lezione.
         In esso una monoposto era libera di muoversi nella scena e seguire un circuito.
         Il primo passo &egrave; stato sostituire la monoposto con il trattore protagonista del nostro gioco.
@@ -95,33 +95,43 @@ body, html {
 <!-- Target container -->
 <div class="w3-container" id="target">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">SCOPO DEL GIOCO</span></h5>
-    <p> Il progetto MyFarm si ispira al progetto Car mostrato a lezione.
-        In esso una monoposto era libera di muoversi nella scena e seguire un circuito.
-        Il primo passo &egrave; stato sostituire la monoposto con il trattore protagonista del nostro gioco.
-        La carlinga della monoposto &egrave; stata sostituita dalla carrozzeria del trattore e lo stesso &egrave; stato fatto per le ruote.
-        Risetto alla monoposto &egrave; stato aggiunto un volante che si muove insieme allo sterzo.
-        Quest'ultimo e le ruote sono animate attraverso l'utilizzo delle funzioni glRotate e glTranslate.
-        I movimenti nella scena sono soggetti alle leggi fisiche del mondo e sono implementati seguendo le dinamiche usate nel progetto Car.
+    <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">SCOPO DEL GIOCO</span></h3>
+    <p>MyFarm &egrave; una rappresentazione di una fattoria nella quale il giocatore deve raccogliere pi&ugrave kg di mais possibili in 1 minuto. Il trattore &egrave; posto al centro della scena e da qui l'utente pu&ograve; muoversi per la scene e raccogliere il mais dai campi che lo circondano. Ogni qualvolta un blocco di mais viene investito il raccolto incrementa di 1 kg.
     </p>
-    <!-- <img src="img/blender_tractor.png" style="width:100%;max-width:1000px;margin-top:32px;"> -->
+    <img src="img/tractor_position.png" style="width:100%;max-width:1000px;margin-top:32px;">
   </div>
 </div>
 
-<div class="w3-container" id="where" style="padding-bottom:32px;">
+<div class="w3-container" id="command">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">WHERE TO FIND US</span></h5>
+    <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">INTERFACCIA E COMANDI</span></h3>
+    <p>L'interfaccia &egrave; composta da pochi semplici elementi. Quello pi&ugrave; evidente &egrave; senza dubbio la mappa 2D della scena. In essa sono visibili la posizione del trattore nella scena (punto blu) e quella del mais che non &egrave; stato ancora raccolto (punti rossi). </br>
+    Contro i bordi laterali della finestra sono rappresentate con tre barre 2D le informazioni riguardo fps per secondo, percentuale del mais raccolto e il tempo rimanente. Le barre differiscono per altezza e colore, elementi che cambiano anche durante la partita per rappresentare dati diversi. La barra dei frame per secondo (estrema sinistra) varia tra il rosso (minimo) e il blu (massimo) passando per il viola. Sempre sul lato sinistro &egrave; visibile la barra del raccolto. Inizialmente vuota cresce in proporzione al mais raccolto e cambia colore partendo da un rosso iniziale fino al verde per le percentuali maggiori. Dal lato opposto della finestra (estrema destra) &egrave; presente la barra del tempo. Essa parte da piena e cala col passar del tempo. I colori usati sono sempre il verde e il rosso, che aiutano a inquadrare meglio la situazione temporale. </br>
+    L'ultimo elemento &egrave; una scritta che indica in modo testuale i kg di mais raccolti fino a quel momento.
+    </p>
+    <img src="img/interface.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <p>Attraverso l'uso della libreria SDL &egrave; creato il ciclo degli eventi che permette di gestire tutti gli eventi in input forniti dall'utente. Nella modalit&agrave; camera libera &egrave; possibile ruotare il punto di vista, mediante il trascinamento e la pressione del tasto sinistro del mouse, mentre tramite lo scroll si controlla lo zoom. Questi comandi sono stati gestiti attraverso l'utilizzo degli eventi SDL_MOUSEMOTION e SDL_MOUSEWHEEL.</br>
+    L'accelerazione (positiva e negativa) e lo sterzo sono controllati da tastiera o Joystick. Attraverso glie eventi SDL_KEYDOWN e SDL_KEYUP si pu&ograve; verificare la pressione di uno tra i pulsanti W, A, S, D utilizzati per il movimento del veicolo. Al verificarsi di questi eventi le chiamate alle funzioni EatKey e DoStep modificano i parametri della classe Tractor che definiscono la sua posizione nella scena e quindi i suoi spostamenti quando sar&agrave; chiamata la funzione Render. In alternativa a questi tasti, il trattore pu&ograve; essere controllato anche attravero un Joystick esterno. Gli eventi SDL_JOYAXISMOTION, SDL_JOYBUTTONDOWN e SDL_JOYBUTTONUP, mappati dalla funzione Joy nei comandi corrispondenti, ci permettono di utilizzare il movimento del joypad e la pressione dei pulsanti come alternativa ai pulsnati W, A, S, D.</br>
+    Oltre ai pulsanti citati sopra sono attivi anche i pulsanti ESC, utilizzato per uscire dalla schermata finale, e i pulsanti F1 F2 F3 F4 F5. Questi danno la possibilit&agrave; di cambiare tra le posizioni definite per la camera, osservare il mondo in wireframe, utilizzare una carrozzeria differente (texture), attivare le luci frontali del trattore e nascondere l'ombra del veicolo.
+    </p>
+  </div>
+</div>
+
+<div class="w3-container" id="implementation">
+  <div class="w3-content" style="max-width:700px">
+    <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">IMPLEMENTAZIONE</span></h3>
+    <p>
+    </p>
+    <!-- <img src="img/interface.png" style="width:100%;max-width:1000px;margin-top:32px;"> -->
+  </div>
+</div>
+
+<div class="w3-container" id="end" style="padding-bottom:32px;">
+  <div class="w3-content" style="max-width:700px">
+    <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">CONCLUSIONI</span></h3>
     <p>Find us at some address at some place.</p>
-    <div id="googleMap" class="w3-sepia" style="width:100%;height:400px;"></div>
     <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
     <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
-    <form action="/action_page.php" target="_blank">
-      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="number" placeholder="How many people" required name="People"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Date and time" required name="date" value="2017-11-16T20:00"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
-      <p><button class="w3-button w3-black" type="submit">SEND MESSAGE</button></p>
-    </form>
   </div>
 </div>
 
@@ -130,7 +140,9 @@ body, html {
 
 <!-- Footer -->
 <footer class="w3-center w3-light-grey w3-padding-48 w3-large">
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+    <p>LORENZO CAZZOLI</p>
+    <p><a href="mailto:lorenzo.cazzoli@studio.unibo.it?Subject=Progetto%20MyFarm" target="_top">lorenzo.cazzoli(at)studio.unibo.it</a></p>
+    <p>Matricola: 0000784395</p>
 </footer>
 
 <!-- Add Google Maps -->

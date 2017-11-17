@@ -24,7 +24,7 @@ void drawCornGround(int pos_x, float pos_y, int pos_z);
 void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, int max);
 
 void drawText(TTF_Font *font, Uint8 fgR, Uint8 fgG, Uint8 fgB, Uint8 fgA, Uint8 bgR, Uint8 bgG, Uint8 bgB, Uint8 bgA, char *text, int x, int y, bool background);
-void drawMinimap(int scrH, int scrW, TTF_Font *font, int u);
+void drawMinimap(TTF_Font *font, int u);
 void  SetCoordToPixel(int scrW, int scrH);
 
 void drawFrameBar(float fps);

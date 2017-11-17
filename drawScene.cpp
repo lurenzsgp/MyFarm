@@ -102,6 +102,7 @@ void drawFloor()
     const float H=0;   // altezza
     const int K=150; //disegna K x K quads
 
+    glColor3f(1,1,1);
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, 3);
     glEnable(GL_TEXTURE_2D);
@@ -159,8 +160,18 @@ void drawBarn () {
     glColor3f(.36,.25,.20); // dark brown
     barn_vane.RenderNxF();
 
-    glColor3f(0,1,1); // cyan
+    glDisable(GL_LIGHTING);
+    // Enable blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_ALPHA);
+    glColor4f(0,1,1,0.3);
+    // glColor3f(0,1,1); // cyan
     barn_window.RenderNxF();
+    glDisable(GL_ALPHA);
+    glDisable(GL_BLEND);
+    glEnable(GL_LIGHTING);
 
     glPopMatrix();
 }
@@ -182,6 +193,7 @@ void drawScarecrow () {
     scarecrow_hat.RenderNxF();
 
     // disegno la mia faccia sotto al cappello
+    glColor3f(1,1,1);
     glBindTexture(GL_TEXTURE_2D, 7);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
@@ -246,6 +258,7 @@ void drawCornBox(int pos_x, int pos_y, int pos_z) {
 
     // disegno le faccia laterali di un cubo con la texture Corn_side
     glPushMatrix();
+    glColor3f(1,1,1);
     glBindTexture(GL_TEXTURE_2D, 4);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
@@ -304,6 +317,7 @@ void drawCornBox(int pos_x, int pos_y, int pos_z) {
 
 void drawCornGround(int pos_x, float pos_y, int pos_z) {
     glPushMatrix();
+    glColor3f(1,1,1);
     glBindTexture(GL_TEXTURE_2D, 6);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
@@ -335,7 +349,7 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
     // riempe tutto lo screen buffer di pixel color sfondo
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    SetCoordToPixel(scrH, scrW);
+    SetCoordToPixel(scrW, scrH);
 
     glLineWidth(2);
 
@@ -424,7 +438,7 @@ void drawText(TTF_Font *font, // font
     }
 }
 
-void drawMinimap(int scrH, int scrW, TTF_Font *font, int u) {
+void drawMinimap(TTF_Font *font, int u) {
     /* calcolo delle coordinate reali dell'oggetto su minimappa */
     float minimap_posx;
     float minimap_posz;
@@ -474,11 +488,10 @@ void drawMinimap(int scrH, int scrW, TTF_Font *font, int u) {
     glVertex2d(minimap_posx - 3, minimap_posz);
     glEnd();
 
-
     sprintf(point, "Raccolto %dKg", u);
 
     // scrivo la percentuale di frumento raccolto
-    drawText(font, 255, 255, 255, 255, 0, 0, 0, 0, point, 20, scrH-20-100-42, true);
+    drawText(font, 255, 255, 255, 255, 0, 0, 0, 0, point, 140, scrH-20-30, true);
 }
 
 // setta le matrici di trasformazione in modo
