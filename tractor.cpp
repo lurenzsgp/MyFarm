@@ -314,6 +314,8 @@ void Tractor::RenderAllParts(bool usecolor) const{
         if (usecolor) glColor3f(.6,.6,.6);
         if (usecolor) SetupWheelTexture(wheelFR1.bbmin,wheelFR1.bbmax);
         wheelFR1.RenderNxV();
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
         glDisable(GL_TEXTURE_2D);
         if (usecolor) glColor3f(0.5,0.5,0.5);
         wheelFR2.RenderNxV();
@@ -333,6 +335,8 @@ void Tractor::RenderAllParts(bool usecolor) const{
         if (usecolor) glColor3f(.6,.6,.6);
         if (usecolor) SetupWheelTexture(wheelBR1.bbmin,wheelBR1.bbmax);
         wheelBR1.RenderNxV();
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
         glDisable(GL_TEXTURE_2D);
         if (usecolor) glColor3f(0.5,0.5,0.5);
         wheelBR2.RenderNxV();
@@ -369,6 +373,5 @@ void Tractor::Render() const{
 
         glEnable(GL_LIGHTING);
     }
-    glPopMatrix();
     glPopMatrix();
 }

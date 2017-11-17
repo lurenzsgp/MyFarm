@@ -344,7 +344,7 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
     glViewport(0,0, scrW, scrH);
 
     // colore di sfondo (fuori dal mondo)
-    glClearColor(.1,.1,.1,1);
+    glClearColor(.0,.0,.0,1);
 
     // riempe tutto lo screen buffer di pixel color sfondo
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

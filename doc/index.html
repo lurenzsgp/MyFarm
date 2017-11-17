@@ -62,11 +62,6 @@ body, html {
     <h3 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT MY FARM</span></h3>
     <p>MyFarm è un videogioco 3D in terza persona interamente sviluppato in C++ mediante l'ausilio delle librerie OpenGL ed SDL in ambiente *nix come progetto finale per il corso di Grafica tenutosi nell'anno 2015/2016 dal prof. Giulio Casciola presso l'Università Alma Mater degli Studi di Bologna.
     In questo sito web sono presentati gli step che hanno permesso la creazione di MyFarm. Particolare attenzione sar&egrave; data alle funzioni utilizzate per la creazione degli oggetti nella scena, della scenografia, dell'illuminazione, nonché delle texture che sono state impiegate. </p>
-    <!-- <div class="w3-panel w3-leftbar w3-light-grey">
-      <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
-      <p>Chef, Coffeeist and Owner: Liam Brown</p>
-    </div> -->
-    <!-- <img src="/w3images/coffeeshop.jpg" style="width:100%;max-width:1000px" class="w3-margin-top"> -->
   </div>
 </div>
 
@@ -88,7 +83,7 @@ body, html {
         Questo &egrave; stato possibile importando le mesh in blender, dove le mesh sono state anche modificate e successivamente esportate nel formato obj.
         Quasi sempre si sono ottenuti pi&ugrave; file obj dalla stessa mesh, poich&egrave; la mesh originale &egrave; stata scomposta in parti pi&ugrave; piccole per motivi di gestibilit&agrave; e personalizzazione (colore e/o texture).
     </p>
-    <img src="img/blender_tractor.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <img src="img/tractor.png" style="width:100%;max-width:1000px;margin-top:32px;">
   </div>
 </div>
 
@@ -120,8 +115,27 @@ body, html {
 <div class="w3-container" id="implementation">
   <div class="w3-content" style="max-width:700px">
     <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">IMPLEMENTAZIONE</span></h3>
-    <p>
+    <p> In questa sezione sarranno illustrati in modo pi&ugrave; dettagliato le scelte implementative che sono state adoperate nella creazione di questo progetto.
     </p>
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Il Trattore</span></h5>
+    <p>&Egrave; l'elemento principale della scena. La sua mesh &egrave; stata scaricata da internet e poi modificata attraverso blender. Le  modifiche effettuate sono state la rimozione di parti superflue, la separazione delle ruote e infine la divisione per colore. In questo modo &egrave stata generata una mesh per ogni colore e una mesh per ogni oggetto che si muove, per qualche grado di libert&agrave;, in maniera indipendente dalla corpo del trattore.</p>
+    <img src="img/blender_tractor.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <p>La rotazione delle ruote &egrave; implementata tramite l'uso di glRotate. L'asse di rotazione varia a seconda delle ruote. Tutte le ruote ruotano attorno all'asse x, simulando l'avanzamento del veicolo, mentre le ruote anteriori ruotano anche sull'asse verticale per simulare lo sterzo. Prima di applicare ogni rotazione gli oggetti sono sempre stati traslati al centro della scena e successivamente riposizionati nella loro posizione originale. Questo serve per evitare perdita di allineamenti tra le parti della vettura, siccome la rotazione &egrave; sempre applicata rispetto al centro della scena.</br>
+    Come le ruote, anche il manubrio subisce delle rotazioni equivalenti alla met&agrave; del valore dello sterzo. La rotazione del volante &egrave; pi&ugrave; difficile siccome il volante oltre ad essere traslato al centro va anche ruotato di un 45 gradi (inclinazione del manubrio) prima di poter essere ruotato dell'angolo di sterzo. Questa procedura &egrave; necessaria per poter ruotare il volante attorno ad un asse standard.</br>
+    Ogni mesh che compone il trattore &egrave; stata colorata utilizzando colori differenti e alle ruote e alla carrozzeria sono state applicate anche delle textures. Utilizzando la generazione automatica delle cordinate texture &egrave; stato utilizzato GL_EYE_LINEAR per mappare l'immagine scelta su tutta la superficie della carrozzeria. Alle ruote &egrave; stata applicata una texture personalizzata generata da me utilizzando la generazione di coordinate automatiche e il parametro GL_OBJECT_LINEAR.
+    </p>
+    <img src="img/tractor_texture.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Terreno & Granoturco</span></h5>
+    <p>Nella versione fornita dal professore il terreno era composto da una serie di GL_QUADS, colorati con differenti toni di verde. Questa versione &egrave; stata modificata mantenendo la struttura, ma aggiungento una texture, mappata fornendo le coordinate esplicite della texture. Per fare ci&ograve; le cordinate 2D dell'immagine scelta, sono state associate alle coordinate 3D dei quad disegnati.</p>
+    <img src="img/ground.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <p>Il granoturco &egrave; rappresentato similarmente. Un singolo blocco di granoturco consiste in un parallelepipedo a cui sono applicate 2 textures diverse. Una per i lati e una per la faccia superiore del solido. Le 2 texture sono sempre applicate manualmente mappando le immagini sul solido.</br>
+    Una terza texture &egrave; utilizzata per disegnare il terreno brullo che sostituisce il granoturco raccolto. Anche in questo caso viene disegnato un quad a cui viene assegnata manualmente la texture. Per evitare problemi di visualizzazione questo quad &egrave; situato ad un altezza leggermente superiore dell'erba.</p>
+    <img src="img/corn.png" style="width:100%;max-width:1000px;margin-top:32px;">
+    <p>Una volta generato un blocco, questo &egrave; disegnato ripetutamente della scena in posizioni diverse. Una matrice, con dimensioni pari al numero di quads di terreno disegnati memorizza un intero che pu&ograve; essere 0, 1 o 2.  </p>
+
+    <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">INTRODUZIONE</span></h5>
+    <p></p>
+    <p></p>
     <!-- <img src="img/interface.png" style="width:100%;max-width:1000px;margin-top:32px;"> -->
   </div>
 </div>
@@ -144,46 +158,6 @@ body, html {
     <p><a href="mailto:lorenzo.cazzoli@studio.unibo.it?Subject=Progetto%20MyFarm" target="_top">lorenzo.cazzoli(at)studio.unibo.it</a></p>
     <p>Matricola: 0000784395</p>
 </footer>
-
-<!-- Add Google Maps -->
-<script>
-function myMap()
-{
-  myCenter=new google.maps.LatLng(41.878114, -87.629798);
-  var mapOptions= {
-    center:myCenter,
-    zoom:12, scrollwheel: false, draggable: false,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
-
-  var marker = new google.maps.Marker({
-    position: myCenter,
-  });
-  marker.setMap(map);
-}
-
-// Tabbed Menu
-function openMenu(evt, menuName) {
-  var i, x, tablinks;
-  x = document.getElementsByClassName("menu");
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
-     tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
-  }
-  document.getElementById(menuName).style.display = "block";
-  evt.currentTarget.firstElementChild.className += " w3-dark-grey";
-}
-document.getElementById("myLink").click();
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
-<!--
-To use this code on your website, get a free API key from Google.
-Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
--->
 
 </body>
 </html>
