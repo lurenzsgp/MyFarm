@@ -49,7 +49,7 @@ body, html {
     <span class="w3-text-white" style="font-size:90px">My Farm</span>
   </div>
   <div class="w3-display-bottomright w3-center w3-padding-large">
-    <span class="w3-text-white">20 november 2017</span>
+    <span class="w3-text-white">18 november 2017</span>
   </div>
 </header>
 
@@ -60,8 +60,8 @@ body, html {
 <div class="w3-container" id="about">
   <div class="w3-content" style="max-width:700px">
     <h3 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT MY FARM</span></h3>
-    <p>MyFarm è un videogioco 3D in terza persona interamente sviluppato in C++ mediante l'ausilio delle librerie OpenGL ed SDL in ambiente *nix come progetto finale per il corso di Grafica tenutosi nell'anno 2015/2016 dal prof. Giulio Casciola presso l'Università Alma Mater degli Studi di Bologna.
-    In questo sito web sono presentati gli step che hanno permesso la creazione di MyFarm. Particolare attenzione sar&egrave; data alle funzioni utilizzate per la creazione degli oggetti nella scena, della scenografia, dell'illuminazione, nonché delle texture che sono state impiegate. </p>
+    <p>MyFarm è un videogioco 3D in terza persona interamente sviluppato in C++ mediante l'ausilio delle librerie OpenGL ed SDL in ambiente *nix come progetto finale per il corso di Grafica tenutosi nell'anno 2015/2016 dal prof. Giulio Casciola presso l'Alma Mater Studiorum di Bologna.
+    In questo sito web sono presentati gli step che hanno permesso la creazione di MyFarm. Particolare attenzione sar&agrave; data alle funzioni utilizzate per la creazione degli oggetti nella scena, della scenografia, dell'illuminazione, nonché delle texture che sono state impiegate. </p>
   </div>
 </div>
 
@@ -73,14 +73,14 @@ body, html {
         In esso una monoposto era libera di muoversi nella scena e seguire un circuito.
         Il primo passo &egrave; stato sostituire la monoposto con il trattore protagonista del nostro gioco.
         La carlinga della monoposto &egrave; stata sostituita dalla carrozzeria del trattore e lo stesso &egrave; stato fatto per le ruote.
-        Risetto alla monoposto &egrave; stato aggiunto un volante che si muove insieme allo sterzo.
+        Rispetto alla monoposto &egrave; stato aggiunto un volante che si muove insieme allo sterzo.
         Quest'ultimo e le ruote sono animate attraverso l'utilizzo delle funzioni glRotate e glTranslate.
         I movimenti nella scena sono soggetti alle leggi fisiche del mondo e sono implementati seguendo le dinamiche usate nel progetto Car.
     </p>
     <p>
         Per mantenere delle prestazioni accettabili, &egrave; molto importante fare attenzione al numero di poligoni delle mesh utilizzate.
-        Per questa ragione, tutte le mesh utilizzate nella scena, sono state scelte controllando la complessita&agrave; delle loro geometrie.
-        Questo &egrave; stato possibile importando le mesh in blender, dove le mesh sono state anche modificate e successivamente esportate nel formato obj.
+        Per questa ragione, tutte le mesh utilizzate nella scena, sono state scelte controllando la complessit&agrave; delle loro geometrie.
+        Questo controllo &egrave; stato possibile importando le mesh in blender, dove sono state modificate e successivamente esportate nel formato obj.
         Quasi sempre si sono ottenuti pi&ugrave; file obj dalla stessa mesh, poich&egrave; la mesh originale &egrave; stata scomposta in parti pi&ugrave; piccole per motivi di gestibilit&agrave; e personalizzazione (colore e/o texture).
     </p>
     <img src="img/tractor.png" style="width:100%;max-width:1000px;margin-top:32px;">
@@ -91,7 +91,7 @@ body, html {
 <div class="w3-container" id="target">
   <div class="w3-content" style="max-width:700px">
     <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">SCOPO DEL GIOCO</span></h3>
-    <p>MyFarm &egrave; una rappresentazione di una fattoria nella quale il giocatore deve raccogliere pi&ugrave kg di mais possibili in 1 minuto. Il trattore &egrave; posto al centro della scena e da qui l'utente pu&ograve; muoversi per la scene e raccogliere il mais dai campi che lo circondano. Ogni qualvolta un blocco di mais viene investito il raccolto incrementa di 1 kg.
+    <p>MyFarm &egrave; una rappresentazione di una fattoria nella quale il giocatore deve raccogliere pi&ugrave kg di mais possibili in 1 minuto. Il trattore &egrave; posto al centro della scena e da qui l'utente pu&ograve; muoversi in essa e raccogliere il mais dai campi che lo circondano. Ogni qualvolta un blocco di mais viene investito il raccolto incrementa di 1 kg.
     </p>
     <img src="img/tractor_position.png" style="width:100%;max-width:1000px;margin-top:32px;">
   </div>
@@ -101,7 +101,7 @@ body, html {
   <div class="w3-content" style="max-width:700px">
     <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">INTERFACCIA E COMANDI</span></h3>
     <p>L'interfaccia &egrave; composta da pochi semplici elementi. Quello pi&ugrave; evidente &egrave; senza dubbio la mappa 2D della scena. In essa sono visibili la posizione del trattore nella scena (punto blu) e quella del mais che non &egrave; stato ancora raccolto (punti rossi). </br>
-    Contro i bordi laterali della finestra sono rappresentate con tre barre 2D le informazioni riguardo fps per secondo, percentuale del mais raccolto e il tempo rimanente. Le barre differiscono per altezza e colore, elementi che cambiano anche durante la partita per rappresentare dati diversi. La barra dei frame per secondo (estrema sinistra) varia tra il rosso (minimo) e il blu (massimo) passando per il viola. Sempre sul lato sinistro &egrave; visibile la barra del raccolto. Inizialmente vuota cresce in proporzione al mais raccolto e cambia colore partendo da un rosso iniziale fino al verde per le percentuali maggiori. Dal lato opposto della finestra (estrema destra) &egrave; presente la barra del tempo. Essa parte da piena e cala col passar del tempo. I colori usati sono sempre il verde e il rosso, che aiutano a inquadrare meglio la situazione temporale. </br>
+    Contro i bordi laterali della finestra sono rappresentate con tre barre 2D le informazioni riguardo gli fps (frame per secondo), percentuale del mais raccolto e il tempo rimanente. Le barre differiscono per altezza e colore, elementi che cambiano anche durante la partita per rappresentare dati diversi. La barra dei frame per secondo (estrema sinistra) varia tra il rosso (minimo) e il blu (massimo) passando per il viola. Sempre sul lato sinistro &egrave; visibile la barra del raccolto. Inizialmente vuota cresce in proporzione al mais raccolto e cambia colore partendo da un rosso iniziale fino al verde per le percentuali maggiori. Dal lato opposto della finestra (estrema destra) &egrave; presente la barra del tempo. Essa parte da piena e cala col passar del tempo. I colori usati sono sempre il verde e il rosso, che aiutano a inquadrare meglio la situazione temporale. </br>
     L'ultimo elemento &egrave; una scritta che indica in modo testuale i kg di mais raccolti fino a quel momento.
     </p>
     <img src="img/interface.png" style="width:100%;max-width:1000px;margin-top:32px;">
@@ -121,26 +121,27 @@ body, html {
     <p>&Egrave; l'elemento principale della scena. La sua mesh &egrave; stata scaricata da internet e poi modificata attraverso blender. Le  modifiche effettuate sono state la rimozione di parti superflue, la separazione delle ruote e infine la divisione per colore. In questo modo &egrave stata generata una mesh per ogni colore e una mesh per ogni oggetto che si muove, per qualche grado di libert&agrave;, in maniera indipendente dalla corpo del trattore.</p>
     <img src="img/blender_tractor.png" style="width:100%;max-width:1000px;margin-top:32px;">
     <p>La rotazione delle ruote &egrave; implementata tramite l'uso di glRotate. L'asse di rotazione varia a seconda delle ruote. Tutte le ruote ruotano attorno all'asse x, simulando l'avanzamento del veicolo, mentre le ruote anteriori ruotano anche sull'asse verticale per simulare lo sterzo. Prima di applicare ogni rotazione gli oggetti sono sempre stati traslati al centro della scena e successivamente riposizionati nella loro posizione originale. Questo serve per evitare perdita di allineamenti tra le parti della vettura, siccome la rotazione &egrave; sempre applicata rispetto al centro della scena.</br>
-    Come le ruote, anche il manubrio subisce delle rotazioni equivalenti alla met&agrave; del valore dello sterzo. La rotazione del volante &egrave; pi&ugrave; difficile siccome il volante oltre ad essere traslato al centro va anche ruotato di un 45 gradi (inclinazione del manubrio) prima di poter essere ruotato dell'angolo di sterzo. Questa procedura &egrave; necessaria per poter ruotare il volante attorno ad un asse standard.</br>
-    Ogni mesh che compone il trattore &egrave; stata colorata utilizzando colori differenti e alle ruote e alla carrozzeria sono state applicate anche delle textures. Utilizzando la generazione automatica delle cordinate texture &egrave; stato utilizzato GL_EYE_LINEAR per mappare l'immagine scelta su tutta la superficie della carrozzeria. Alle ruote &egrave; stata applicata una texture personalizzata generata da me utilizzando la generazione di coordinate automatiche e il parametro GL_OBJECT_LINEAR.
+    Come le ruote, anche il manubrio subisce delle rotazioni equivalenti al doppio del valore dello sterzo. La rotazione del volante &egrave; pi&ugrave; difficile siccome il volante oltre ad essere traslato al centro va anche ruotato di un 45 gradi (inclinazione del manubrio) prima di poter essere ruotato dell'angolo di sterzo. Questa procedura &egrave; necessaria per poter ruotare il volante attorno ad un asse standard.</br>
+    Ogni mesh che compone il trattore &egrave; stata colorata utilizzando colori differenti e alle ruote e alla carrozzeria sono state applicate anche delle textures. Utilizzando la generazione automatica delle cordinate texture &egrave; stato utilizzato GL_EYE_LINEAR per mappare l'immagine scelta su tutta la superficie della carrozzeria. Alle ruote &egrave; stata applicata una texture personalizzata, generata in Gimp, utilizzando la generazione di coordinate automatiche e il parametro GL_OBJECT_LINEAR.
     </p>
     <img src="img/tractor_texture.png" style="width:100%;max-width:1000px;margin-top:32px;">
+
     <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Terreno & Granoturco</span></h5>
-    <p>Nella versione fornita dal professore il terreno era composto da una serie di GL_QUADS, colorati con differenti toni di verde. Questa versione &egrave; stata modificata mantenendo la struttura, ma aggiungento una texture, mappata fornendo le coordinate esplicite della texture. Per fare ci&ograve; le cordinate 2D dell'immagine scelta, sono state associate alle coordinate 3D dei quad disegnati.</p>
+    <p>Nella versione fornita dal professore il terreno era composto da una serie di GL_QUADS, colorati con differenti toni di verde. Questa versione &egrave; stata modificata mantenendo la struttura, ma aggiungento una texture, mappata fornendo le coordinate in modo esplicito. Per fare ci&ograve; le cordinate 2D dell'immagine scelta, sono state associate alle coordinate 3D dei quad disegnati.</p>
     <img src="img/ground.png" style="width:100%;max-width:1000px;margin-top:32px;">
     <p>Il granoturco &egrave; rappresentato similarmente. Un singolo blocco di granoturco consiste in un parallelepipedo a cui sono applicate 2 textures diverse. Una per i lati e una per la faccia superiore del solido. Le 2 texture sono sempre applicate manualmente mappando le immagini sul solido.</br>
     Una terza texture &egrave; utilizzata per disegnare il terreno brullo che sostituisce il granoturco raccolto. Anche in questo caso viene disegnato un quad a cui viene assegnata manualmente la texture. Per evitare problemi di visualizzazione questo quad &egrave; situato ad un altezza leggermente superiore dell'erba.</p>
     <img src="img/corn.png" style="width:100%;max-width:1000px;margin-top:32px;">
-    <p>Una volta generato un blocco, questo &egrave; disegnato ripetutamente della scena in posizioni diverse. Una matrice, con dimensioni pari al numero di quads di terreno disegnati, memorizza un intero che pu&ograve; essere 0, 1 o 2. In base al numero memorizzato il metodo drawFloor disegner&agrave; nella posizione corrente sar&agrave; disegnata solo erba, erba pi&ugrave; mais (drawCornBox) o erba e terra brulla (drawCornGround). Questa matrice &egrave; inizializzata prima del ciclo degli eventi, ma volendo potrebbe essere inizializzata da file rendendo la disposizione del granoturco pi&ugrave; artistica e fantasiosa.</br>
-    La funzione DoStep aggiorna, ad ogni movimento del trattore, la matrice e in questo modo il granoturco &egrave; automaticamente distrutto e sostituito dalla terra brulla.</p>
+    <p>Una volta generato un blocco, questo &egrave; disegnato ripetutamente nella scena in posizioni diverse. Una matrice, con dimensioni pari al numero di quads di terreno disegnati, memorizza un intero che pu&ograve; essere 0, 1 o 2. In base al numero memorizzato il metodo drawFloor disegner&agrave; nella posizione corrente solo erba, erba pi&ugrave; mais (drawCornBox) o erba e terra brulla (drawCornGround). Questa matrice &egrave; inizializzata prima del ciclo degli eventi, ma volendo potrebbe essere inizializzata da file rendendo la disposizione del granoturco pi&ugrave; artistica e fantasiosa.</br>
+    La funzione DoStep aggiorna, ad ogni movimento del veicolo, la matrice e in questo modo il granoturco &egrave; automaticamente distrutto e sostituito dalla terra brulla, dopo il passaggio del trattore.</p>
 
     <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Il Cielo</span></h5>
-    <p>I metodi drawSphere e drawSky si occupano del rendering dello sfondo. Il primo genera una sfera a cui viene applicata una texture a tema cielo con il secondo metodo. Quando la modalit&agrave; wireframe &egrave; attiva la visualizzazione del cielo cambia e tramite il metodo glPolygonMode e il parametro GL_LINE si rappresenta il cielo utilizzado righe nere e facce bianche.</p>
+    <p>I metodi drawSphere e drawSky si occupano del rendering dello sfondo. Il primo genera una sfera a cui viene applicata una texture a tema cielo utilizzando il secondo. Quando la modalit&agrave; wireframe &egrave; attiva la visualizzazione del cielo cambia e tramite il metodo glPolygonMode e il parametro GL_LINE viene rappresentato con righe nere e facce bianche.</p>
 
     <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Fattoria, Staccionata e Spaventa passeri</span></h5>
-    <p>Questi tre elementi insieme all'erba e al granoturco completano la scena. Il primo, la fattoria, &egrave; una mesh scaricata da internet e poi divisa in diversi file obj per poter disegnare i diversi dettagli con colori diversi. Consiste in una mesh composta da pochi poligoni in cui si distinduono il tetto, il segnavento sul tetto, una trave, il portone e le finestre. Tutti questi elementi sono stati generati utilizzando colori opachi salvo le finestre per le quali si &egrave; creato un effetto trasparenza. Questo &egrave; possibile utilizzando GL_BLEND, GL_ALPHA e aggiungendo il parametro alpha al colore scelto. In questo modo inserendo un valore alpha vicino a 0 &egrave; possibile simulare un effetto vetro.</br>
+    <p>Questi tre elementi insieme all'erba e al granoturco completano la scena. Il primo, la fattoria, &egrave; una mesh scaricata da internet e poi divisa in diversi file obj per poter disegnare i diversi dettagli con colori differenti. &Egrave; mesh composta da pochi poligoni in cui si distinduono il tetto, il segnavento sul tetto, una trave, il portone e le finestre. Tutti questi elementi sono stati generati utilizzando colori opachi salvo le finestre per le quali si &egrave; creato un effetto trasparenza. Questo &egrave; possibile utilizzando GL_BLEND, GL_ALPHA e aggiungendo il parametro alpha al colore scelto. In questo modo inserendo un valore alpha vicino a 0 &egrave; possibile simulare un effetto vetro.</br>
     La staccionata &egrave; anchessa disegnata attraverso l'uso di una mesh. Questa &egrave; stata generata in Blender partendo da un singolo elemento e duplicandolo, con il modificatore vettore, fino a raggiungere la lunghezza desiderata di 60 metri. Questi blocchi da 60 metri di staccionata sono stati posizionati con le funzioni glTranslate e glRotate a comporre un quadrato di dimensione 120m x 120m attorno all'origine.</br>
-    Lo spaventa passeri &egrave; sempre generato da una mesh presa online e posizionato con la funzione glTranslate all'esterno della staccionata. Al posto della faccia, sotto al cappello &egrave; presente un rettangolo su cui &egrave; stata applicata la mia faccia settando le cordinate della texture manualmente.</p>
+    Lo spaventa passeri &egrave; sempre generato da una mesh presa online e posizionato con la funzione glTranslate all'esterno della staccionata. Sotto al cappello &egrave; presente un rettangolo su cui &egrave; stata applicata la mia faccia settando le cordinate della texture manualmente.</p>
     <img src="img/barn.png" style="width:100%;max-width:1000px;margin-top:32px;">
     <p>La staccionata definisce i limiti dell'area di gioco. Nella funzione DoStep, all'aggiornamento della posizione del trattore, si verifica che le mesh del trattore non entri in collisione con la staccionata o la fattoria. Questo controllo &egrave; semplicemente implementato controllando che la posione del trattore sia inclusa in un range che coincide con lo spazio all'interno del recinto unito alla fattoria.</p>
     <img src="img/farm.png" style="width:100%;max-width:1000px;margin-top:32px;">
@@ -150,7 +151,7 @@ body, html {
     <img src="img/light.png" style="width:100%;max-width:1000px;margin-top:32px;">
 
     <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">L'Ombra</span></h5>
-    <p>L'ombra &egrave; una funzione attivabile attiva solo sul trattore. Essa non fa altro che disegnare la mesh del trattore, scalata fino ad essere piatta, sopra al terreno. La funzione glScale ci permette di ridimensionare e appiattire la mesh, mentre attraverso il parametro usecolor si controlla il colore del trattore, che per default &egrave; settato a nero.</p>
+    <p>L'ombra &egrave; una funzione attivabile solo sul trattore. Essa non fa altro che disegnare la mesh del trattore, scalata fino ad essere piatta, sopra al terreno. La funzione glScale ci permette di ridimensionare e appiattire la mesh, mentre attraverso il parametro usecolor si controlla la colorazione del trattore, che per default &egrave; settato a nero.</p>
     <p></p>
 
     <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Telecamera</span></h5>
@@ -160,18 +161,18 @@ body, html {
             <li>CAMERA_TOP_FIXED posiziona la telecamera affianco alla ruota anteriore sinistra, ma ruotata verso la cabina del trattore, fornendo una vista fissa sul veicolo.</li>
             <li>CAMERA_TOP_CAR fornisce una visuale da dietro e sopra del trattore.</li>
             <li>CAMERA_PILOT mostra la scena da dentro la cabina.</li>
-            <li>CAMERA_MOUSE la camera guarda fissa l'origine della scena, ma con l'utilizzo del mouse &egrave; possibile ruotare la visuale e avvicinarsi o allontanarsi. Questo è reso possibile grazie alle operazioni di glTranslate e glRotate sui parametri eyeDist, viewBeta e viewAlpha</li>
+            <li>CAMERA_MOUSE la camera guarda fissa l'origine della scena, ma con l'utilizzo del mouse &egrave; possibile ruotare la visuale e avvicinarsi o allontanarsi. Questo è reso possibile grazie alle operazioni di glTranslate e glRotate sui parametri eyeDist, viewBeta e viewAlpha.</li>
         </ul>
     </p>
     <img src="img/camera.png" style="width:100%;max-width:1000px;margin-top:32px;">
 
     <h5><class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Interfaccia</span></h5>
-    <p>Per progettare l'interfaccia di gioco è stato necessario settare le matrici di trasformazione sullo spazio 2D, in modo che si disegni direttamente sulle coordinate dei pixel dello schermo. Questo è stato possibile grazie al metodo SetCoordToPixel che imposta correttamente le matrici di proiezione e di trasformazione prima di disegnare a schermo usando nuovamente le primitive OpenGL.
+    <p>Per progettare l'interfaccia di gioco è stato necessario settare le matrici di trasformazione sullo spazio 2D, in modo da disegnare direttamente sulle coordinate dei pixel dello schermo. Questo è stato possibile grazie al metodo SetCoordToPixel che imposta correttamente le matrici di proiezione e di trasformazione prima di disegnare a schermo usando nuovamente le primitive OpenGL.
     L' interfaccia &egrave; composta da diversi elementi:
         <ul>
             <li>Barre Laterali - Tre barre colorate che mostrano fps, tempo e raccolto. Sono state realizzate tramire GL_QUADS, variando la loro posizione lungo l'asse x e la loro altezza proporzionalmente con i valori che devono mostrare. I colori dipendono dal valore attuale del dato rappresentato.</li>
-            <li>Minimappa - In alto a sinistra è stata posizionata una minimappa su cui sono disegnati in blu il trattore e in rosso le posizioni del granoturca da raccogliere. La posizione di questi elementi viene calcolata come semplice trasposizione dalle coordinate reali di essi nella scena. Mentre per disegnare la mappa &egrave; stata acora usata GL_QUADS gli elementi di essa sono rappresentati con GL_POINTS. Questa scelta &egrave; stata forzata dal grande nnumero di elementi da rappresentare nel poco spazio.</li>
-            <li>Raccolto - Accanto alla minimappa è stato posto un testo raffigurante il raccolto attuale. Per realizzarlo è stata sfruttata la libreria SDL_TTF. Per utilizzare questa libreria &egrave; stato necessario inizializzarla tramite il comando TTF_Init nel main e caricare un font adeguato per la scrittura di testo (FreeSans.ttf). Siccome per poter scrivere su schermo in concomitanza con OpenGL, TTF non mette a disposizione una primitiva che permette una scrittura immediata in una certa posizione, &egrave; stata implementata la funzione drawText. Questa genera una SDL_Surface, su cui &egrave; scritto il testo, che viene trasformata in texture e applicata a un rettangolo generato nella posizione voluta.
+            <li>Minimappa - In alto a sinistra è stata posizionata una minimappa su cui sono disegnati in blu il trattore e in rosso le posizioni del granoturca ancora da raccogliere. La posizione di questi elementi viene calcolata come semplice trasposizione dalle coordinate reali a quelle della mappa. Mentre per disegnare la mappa &egrave; stata ancora usata GL_QUADS gli elementi di essa sono rappresentati con GL_POINTS. Questa scelta &egrave; stata forzata dal grande numero di elementi da rappresentare nel poco spazio.</li>
+            <li>Raccolto - Accanto alla minimappa è stato posto un testo raffigurante il raccolto attuale. Per realizzarlo è stata sfruttata la libreria SDL_TTF. Dopo averla inizializzata nel main tramite il comando TTF_Init, si &egrave; dovuto caricare un font adeguato per la scrittura di testo (FreeSans.ttf). Siccome per poter scrivere su schermo in concomitanza con OpenGL, TTF non mette a disposizione una primitiva che permette una scrittura immediata in una certa posizione, &egrave; stata implementata la funzione drawText. Questa genera una SDL_Surface, su cui &egrave; scritto il testo, che viene trasformata in texture e applicata a un rettangolo generato nella posizione voluta.
             </li>
         </ul>
     </p>
@@ -196,9 +197,9 @@ body, html {
   <div class="w3-content" style="max-width:700px">
     <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">CONCLUSIONI</span></h3>
     <p>Il completamento di questo progetto necissitava di comprendere il funzionamento di OpenGL oltre che ai concetti di matrice di modellazione e proiezione. L'utilizzo di tale libreria e di SDL2 &egrave; stato soprattutto possibile grazie alla documentazione online e agli esempi visti e forniti durante il corso. </br>
-    Le maggiori difficolt&agrave; sono state incontrate nella fase iniziale di studio del progetto base, dal quale si &egrave; iniziato sostituendo le mesh del veicolo. Una volta consolidate le dinamiche necessarie per il disegno, traslazione e rotazione delle geometrie si sono affrontate le difficolt&agrave; insite nelle applicazioni delle texture. La difficolt&agrave maggiore &egrave; stata incontrata nella creazione di una funzione che scrivesse il testo a video, ma dopo giorni di debugging si &egrave; riuscito a superare anche questo problema.</br>
+    Le maggiori difficolt&agrave; sono state incontrate nella fase iniziale di studio del progetto base, dal quale si &egrave; iniziato a sostituire le mesh del veicolo. Una volta consolidate le dinamiche necessarie per il disegno, traslazione e rotazione delle geometrie si sono affrontate le difficolt&agrave; insite nelle applicazioni delle texture. La difficolt&agrave maggiore &egrave; stata incontrata nella creazione di una funzione che scrivesse il testo a video, ma dopo giorni di debugging si &egrave; riuscito a superare anche questo problema.</br>
     Meno difficili sono state le fasi di modellazione 3D necessarie per la generazione delle mesh da importare nella scena. Questo solo per il fatto che ero gi&agrave; a conoscenza del funzionamento di Blender.</br>
-    Alla fine di questo progetto &egrave; stato generato un gioco coinvolgente con una scena piena e colorata che soddisfa tutte le richieste grafiche richieste inizialmente dal progetto.
+    Alla fine di questo progetto &egrave; stato generato un gioco coinvolgente, con una scena piena e colorata che soddisfa tutte le richieste grafiche indicate nelle specifiche di progetto.
 </p>
   </div>
 </div>
