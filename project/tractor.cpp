@@ -12,7 +12,7 @@
 #include <GL/glu.h>
 #endif
 
-#include <vector> // la classe vector di STL
+#include <vector>
 
 #include "tractor.h"
 #include "point3.h"
@@ -20,7 +20,7 @@
 
 
 // mesh tractor
-Mesh carlinga((char *)"object/tractor_chassis.obj"); // chiama il costruttore
+Mesh carlinga((char *)"object/tractor_chassis.obj");
 Mesh volante((char *)"object/tractor_volante.obj");
 Mesh wheelBR1((char *)"object/tractor_wheel_back_R.obj");
 Mesh wheelFR1((char *)"object/tractor_wheel_front_R.obj");
@@ -32,11 +32,11 @@ Mesh fanali_front((char *)"object/tractor_fanali-front.obj");
 Mesh fanali_back((char *)"object/tractor_fanali-back.obj");
 
 // extern Mesh balone;
-extern bool useEnvmap; // var globale esterna: per usare l'evnrionment mapping
-extern bool useHeadlight; // var globale esterna: per usare i fari
-extern bool useShadow; // var globale esterna: per generare l'ombra
-extern int corn[150][150];
-extern int forage;
+extern bool useEnvmap;      // var globale esterna: per usare l'evnrionment mapping
+extern bool useHeadlight;   // var globale esterna: per usare i fari
+extern bool useShadow;      // var globale esterna: per generare l'ombra
+extern int corn[150][150];  // var globale esterna: per gestire il granoturco
+extern int forage;          // var globale esterna: per aggiornare il raccolto
 
 // da invocare quando e' stato premuto/rilasciato il tasto numero "keycode"
 void Controller::EatKey(int keycode, int* keymap, bool pressed_or_released)
@@ -59,17 +59,16 @@ void SetupEnvmapTexture()
     glBindTexture(GL_TEXTURE_2D,1);
 
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_TEXTURE_GEN_S); // abilito la generazione automatica delle coord texture S e T
+    glEnable(GL_TEXTURE_GEN_S);     // abilito la generazione automatica delle coord texture S e T
     glEnable(GL_TEXTURE_GEN_T);
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE , GL_EYE_LINEAR); // Env map
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE , GL_EYE_LINEAR);
-    glColor3f(1,1,1); // metto il colore neutro (viene moltiplicato col colore texture, componente per componente)
-    glDisable(GL_LIGHTING); // disabilito il lighting OpenGL standard (lo faccio con la texture)
+    glColor3f(1,1,1);               // colore neutro (viene moltiplicato col colore texture, componente per componente)
+    glDisable(GL_LIGHTING);         // disabilito il lighting OpenGL standard
 }
 
 // funzione che prepara tutto per creare le coordinate texture (s,t) da (x,y,z)
-// Mappo l'intervallo [ minY , maxY ] nell'intervallo delle T [0..1]
-//     e l'intervallo [ minZ , maxZ ] nell'intervallo delle S [0..1]
+// Mappo l'intervallo [ minY , maxY ] nell'intervallo delle T [0..1] e l'intervallo [ minZ , maxZ ] nell'intervallo delle S [0..1]
 void SetupWheelTexture(Point3 min, Point3 max){
     glBindTexture(GL_TEXTURE_2D,0);
     glEnable(GL_TEXTURE_2D);
@@ -90,16 +89,12 @@ void SetupWheelTexture(Point3 min, Point3 max){
 }
 
 // DoStep: facciamo un passo di fisica (a delta_t costante)
-//
 // Indipendente dal rendering.
-//
-// ricordiamoci che possiamo LEGGERE ma mai SCRIVERE
-// la struttura controller da DoStep
 void Tractor::DoStep(){
     // computiamo l'evolversi della macchina
     static int i=5;
 
-    float vxm, vym, vzm; // velocita' in spazio macchina
+    float vxm, vym, vzm;    // velocita' in spazio macchina
 
     // da vel frame mondo a vel frame macchina
     float cosf = cos(facing*M_PI/180.0);
@@ -125,7 +120,7 @@ void Tractor::DoStep(){
     facing = facing - (vzm*grip)*sterzo;
 
     // rotazione mozzo ruote
-    float da ; //delta angolo
+    float da ;  //delta angolo
     da=(360.0*vzm)/(2.0*M_PI*raggioRuotaA);
     mozzoA+=da;
     da=(360.0*vzm)/(2.0*M_PI*raggioRuotaP);
@@ -136,7 +131,6 @@ void Tractor::DoStep(){
     vy = vym;
     vz = -sinf*vxm + cosf*vzm;
 
-    // posizione = posizione + velocita * delta t (ma delta t e' costante)
     // limitazione dello spazio di movimento
     if (pow(px + vx, 2) < 3364) {
         if (pz + vz < -51) {
@@ -145,7 +139,6 @@ void Tractor::DoStep(){
             px+=vx;
         }
     }
-
 
     py+=vy;
     if (pow(pz + vz, 2) < 3364) {
@@ -156,7 +149,7 @@ void Tractor::DoStep(){
         }
     }
 
-    // delete corn on collision
+    // elimina il granoturco che si trova nella posizione attuale
     int pos_x, pos_z;
     for (int x=px-1; x<=px+1; x++)
         for (int z=pz-1; z<=pz+1; z++) {
@@ -176,15 +169,14 @@ void Controller::Init(){
 
 void Tractor::Init(){
     // inizializzo lo stato della macchina
-    px=pz=facing=0; // posizione e orientamento
+    px=pz=facing=0;     // posizione e orientamento
     py=0.0;
-
     mozzoA=mozzoP=sterzo=0;   // stato
-    vx=vy=vz=0;      // velocita' attuale
+    vx=vy=vz=0;         // velocita' attuale
+
     // inizializzo la struttura di controllo
     controller.Init();
 
-    //velSterzo=3.4;         // A
     velSterzo=2.4;         // A
     velRitornoSterzo=0.93; // B, sterzo massimo = A*B / (1-B)
 
@@ -192,16 +184,14 @@ void Tractor::Init(){
 
     // attriti: percentuale di velocita' che viene mantenuta
     // 1 = no attrito
-    // <<1 = attrito grande
-    attritoZ = 0.991;  // piccolo attrito sulla Z (nel senso di rotolamento delle ruote)
-    attritoX = 0.8;  // grande attrito sulla X (per non fare slittare la macchina)
-    attritoY = 1.0;  // attrito sulla y nullo
+    attritoZ = 0.991;   // piccolo attrito sulla Z (nel senso di rotolamento delle ruote)
+    attritoX = 0.8;     // grande attrito sulla X (per non fare slittare la macchina)
+    attritoY = 1.0;     // attrito sulla y nullo
 
-    // Nota: vel max = accMax*attritoZ / (1-attritoZ)
     raggioRuotaA = 0.25;
     raggioRuotaP = 0.35;
 
-    grip = 0.45; // quanto il facing macchina si adegua velocemente allo sterzo
+    grip = 0.45;        // quanto il facing macchina si adegua velocemente allo sterzo
 }
 
 // attiva una luce di openGL per simulare un faro della macchina
@@ -236,41 +226,40 @@ void Tractor::DrawHeadlight(float x, float y, float z, int lightN, bool useHeadl
 
 
 // funzione che disegna tutti i pezzi della macchina
-// (carlinga, + 4 route)
 // (da invocarsi due volte: per la macchina, e per la sua ombra)
-// (se usecolor e' falso, NON sovrascrive il colore corrente
-//  e usa quello stabilito prima di chiamare la funzione)
+// (se usecolor e' falso, NON sovrascrive il colore corrente e usa quello di default
 void Tractor::RenderAllParts(bool usecolor) const{
-    // disegna la carliga con una mesh
+    // disegna la carrozzeria con una mesh
     glPushMatrix();
     glScalef(0.5f,0.5f,0.5f);
     if (!useEnvmap)
     {
-        if (usecolor) glColor3f(0.2,1,0.2);     // colore verde, da usare con Lighting
+        if (usecolor) glColor3f(0.2,1,0.2);     // colore verde
     }
     else {
         if (usecolor) SetupEnvmapTexture();
     }
-    glRotatef(180,0,1,0); // ruota il trattore per vederlo da dietro
-    carlinga.RenderNxV(); // rendering delle mesh carlinga usando normali per vertice
+    glRotatef(180,0,1,0);       // ruota il trattore per vederlo da dietro
+    carlinga.RenderNxV();       // rendering delle mesh carlinga usando normali per vertice
     glDisable(GL_TEXTURE_2D);
 
     if (usecolor) glEnable(GL_LIGHTING);
 
     // disegna roll-bar
-    if (usecolor) glColor3f(.5,.5,.5); //	Medium dark gray
+    if (usecolor) glColor3f(.5,.5,.5); // medium dark gray
     roll_bar.RenderNxV();
 
     // disegna dettagli neri
-    if (usecolor) glColor3f(.0,.0,.0); //black
+    if (usecolor) glColor3f(.0,.0,.0); // black
     seat.RenderNxV();
 
     // disegna fanali anteriori
     if (usecolor) {
         if (useHeadlight) {
-            glColor3f(1,1,.2); // giallo scuro
+            // se i fanali sono accesi
+            glColor3f(1,1,.2);      // giallo scuro
         } else {
-            glColor3f(1,1,.9); // giallo chiaro
+            glColor3f(1,1,.9);      // giallo chiaro
         }
     }
     fanali_front.RenderNxV();
@@ -279,18 +268,18 @@ void Tractor::RenderAllParts(bool usecolor) const{
     if (usecolor) glColor3f(1,0,0); // rosso
     fanali_back.RenderNxV();
 
-    glPushMatrix();
     // disegna il volante
+    glPushMatrix();
     glDisable(GL_LIGHTING);
-    if (usecolor) glColor3f(.1,.1,.1);
+    if (usecolor) glColor3f(.1,.1,.1); // nero
     glTranslate(volante.Center());
     glRotatef(-45, 1,0,0);
     glRotatef(2 * sterzo, 0,1,0);
     glRotatef(43, 1,0,0);
     glTranslate(-volante.Center());
-
     volante.RenderNxV();
     glPopMatrix();
+
     // disegna ruote
     for (int i=0; i<2; i++) {
         // i==0 -> disegno ruote destre.
@@ -314,9 +303,10 @@ void Tractor::RenderAllParts(bool usecolor) const{
         if (usecolor) glColor3f(.6,.6,.6);
         if (usecolor) SetupWheelTexture(wheelFR1.bbmin,wheelFR1.bbmax);
         wheelFR1.RenderNxV();
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
+        glDisable(GL_TEXTURE_GEN_S);    // senza questa istruzione non funzionano le scritte
+        glDisable(GL_TEXTURE_GEN_T);    // senza questa istruzione non funzionano le scritte
         glDisable(GL_TEXTURE_2D);
+
         if (usecolor) glColor3f(0.5,0.5,0.5);
         wheelFR2.RenderNxV();
         glPopMatrix();
@@ -335,9 +325,10 @@ void Tractor::RenderAllParts(bool usecolor) const{
         if (usecolor) glColor3f(.6,.6,.6);
         if (usecolor) SetupWheelTexture(wheelBR1.bbmin,wheelBR1.bbmax);
         wheelBR1.RenderNxV();
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
+        glDisable(GL_TEXTURE_GEN_S);    // senza questa istruzione non funzionano le scritte
+        glDisable(GL_TEXTURE_GEN_T);    // senza questa istruzione non funzionano le scritte
         glDisable(GL_TEXTURE_2D);
+
         if (usecolor) glColor3f(0.5,0.5,0.5);
         wheelBR2.RenderNxV();
 
@@ -356,7 +347,6 @@ void Tractor::Render() const{
     glRotatef(facing, 0,1,0);
 
     // sono nello spazio MACCHINA
-
     DrawHeadlight(-0.25,0.5,-2, 0, useHeadlight); // accendi faro sinistro
     DrawHeadlight(+0.25,0.5,-2, 1, useHeadlight); // accendi faro destro
 
@@ -365,11 +355,11 @@ void Tractor::Render() const{
     // ombra!
     if(useShadow)
     {
-        glColor3f(0.4,0.4,0.4); // colore fisso
-        glTranslatef(0,0.02,0); // alzo l'ombra di un epsilon per evitare z-fighting con il pavimento
-        glScalef(1.01,0,1.01);  // appiattisco sulla Y, ingrandisco dell'1% sulla Z e sulla X
-        glDisable(GL_LIGHTING); // niente lighing per l'ombra
-        RenderAllParts(false);  // disegno la macchina appiattita
+        glColor3f(0.4,0.4,0.4);     // colore fisso
+        glTranslatef(0,0.02,0);     // alzo l'ombra di un epsilon per evitare z-fighting con il pavimento
+        glScalef(1.01,0,1.01);      // appiattisco sulla Y, ingrandisco dell'1% sulla Z e sulla X
+        glDisable(GL_LIGHTING);     // niente lighing per l'ombra
+        RenderAllParts(false);      // disegno la macchina appiattita
 
         glEnable(GL_LIGHTING);
     }

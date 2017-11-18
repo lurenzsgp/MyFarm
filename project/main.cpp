@@ -25,33 +25,34 @@
 #define CAMERA_TYPE_MAX 5
 
 
-float viewAlpha=20, viewBeta=40; // angoli che definiscono la vista
-float eyeDist=5.0; // distanza dell'occhio dall'origine
-int scrH=750, scrW=750; // altezza e larghezza viewport (in pixels)
+float viewAlpha=20, viewBeta=40;    // angoli che definiscono la vista
+float eyeDist=5.0;                  // distanza dell'occhio dall'origine
+int scrH=750, scrW=750;             // altezza e larghezza viewport (in pixels)
 bool useWireframe=false;
 bool useEnvmap=false;
 bool useHeadlight=false;
 bool useShadow=true;
 int cameraType=0;
 
-Tractor tractor; // la nostra macchina
-int nstep=0; // numero di passi di FISICA fatti fin'ora
-const int PHYS_SAMPLING_STEP=10; // numero di millisec che un passo di fisica simula
+Tractor tractor;                    // la nostra macchina
+int nstep=0;                        // numero di passi di FISICA fatti fin'ora
+const int PHYS_SAMPLING_STEP=10;    // numero di millisec che un passo di fisica simula
 
 // Frames Per Seconds
-const int fpsSampling = 3000; // lunghezza intervallo di calcolo fps
-float fps=0; // valore di fps dell'intervallo precedente
-int fpsNow=0; // quanti fotogrammi ho disegnato fin'ora nell'intervallo attuale
-Uint32 timeLastInterval=0; // quando e' cominciato l'ultimo intervallo
-Uint32 startTime; // = SDL_GetTicks();
-Uint32 endTime = 60000;
-TTF_Font *font;
+const int fpsSampling = 3000;       // lunghezza intervallo di calcolo fps
+float fps=0;                        // valore di fps dell'intervallo precedente
+int fpsNow=0;                       // quanti fotogrammi ho disegnato fin'ora nell'intervallo attuale
+Uint32 timeLastInterval=0;          // quando e' cominciato l'ultimo intervallo
+Uint32 startTime;
+Uint32 endTime = 60000;             // dopo quanti millesecondi termina il gioco
+TTF_Font *font;                     // variabile del font
 
-int corn[150][150];
-int MaxForage = 0;
-int forage = 0;
+int corn[150][150];                 // matrice del granoturco
+int MaxForage = 0;                  // numero massimo di granoturco disponibile
+int forage = 0;                     // granoturco raccolto fino a questo momento
 
 
+// esegue il binding della texture
 bool LoadTexture(int textbind,char *filename){
     SDL_Surface *s = IMG_Load(filename);
     if (!s) return false;
@@ -136,12 +137,11 @@ void setCamera(){
 /* Esegue il Rendering della scena */
 void rendering(SDL_Window *win){
 
-    // un frame in piu'!!!
     fpsNow++;
 
-    glLineWidth(3); // linee larghe
+    glLineWidth(3);     // linee larghe
 
-    // settiamo il viewport
+    // setta il viewport
     glViewport(0,0, scrW, scrH);
 
     // colore sfondo = bianco
@@ -151,10 +151,10 @@ void rendering(SDL_Window *win){
     // settiamo la matrice di proiezione
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    gluPerspective( 70, //fovy,
-        ((float)scrW) / scrH,//aspect Y/X,
-        0.2,//distanza del NEAR CLIPPING PLANE in coordinate vista
-        1000  //distanza del FAR CLIPPING PLANE in coordinate vista
+    gluPerspective( 70,         //fovy,
+        ((float)scrW) / scrH,   //aspect Y/X,
+        0.2,                    //distanza del NEAR CLIPPING PLANE in coordinate vista
+        1000                    //distanza del FAR CLIPPING PLANE in coordinate vista
     );
 
     glMatrixMode( GL_MODELVIEW );
@@ -163,21 +163,13 @@ void rendering(SDL_Window *win){
     // riempe tutto lo screen buffer di pixel color sfondo
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    //drawAxis(); // disegna assi frame VISTA
 
     // setto la posizione luce
-    float tmpv[4] = {0,1,2,  0}; // ultima comp=0 => luce direzionale
+    float tmpv[4] = {0,1,2,  0};                // ultima comp=0 => luce direzionale
     glLightfv(GL_LIGHT0, GL_POSITION, tmpv );
 
 
-    // settiamo matrice di vista
-    //glTranslatef(0,0,-eyeDist);
-    //glRotatef(viewBeta,  1,0,0);
-    //glRotatef(viewAlpha, 0,1,0);
     setCamera();
-
-
-    //drawAxis(); // disegna assi frame MONDO
 
     static float tmpcol[4] = {1,1,1,  1};
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, tmpcol);
@@ -185,35 +177,29 @@ void rendering(SDL_Window *win){
 
     glEnable(GL_LIGHTING);
 
-    // settiamo matrice di modellazione
-    //drawAxis(); // disegna assi frame OGGETTO
-    //drawCubeWire();
-
-    drawSky(); // disegna il cielo come sfondo
-    drawBarn(); // disegna la fattoria
-    drawFence(); // disegna la staccionata
-    drawScarecrow (); // disegna lo spaventapasseri
-    drawFloor(); // disegna il suolo
+    // disegna la scena
+    drawSky();          // disegna il cielo come sfondo
+    drawBarn();         // disegna la fattoria
+    drawFence();        // disegna la staccionata
+    drawScarecrow ();   // disegna lo spaventapasseri
+    drawFloor();        // disegna il terreno
 
 
 
-    tractor.Render(); // disegna la macchina
-
-    // attendiamo la fine della rasterizzazione di
-    // tutte le primitive mandate
+    tractor.Render();   // disegna il trattore
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
 
-    // disegnamo i fps (frame x sec) come una barra a sinistra.
-    // (vuota = 0 fps, piena = 100 fps)
+    // passo nelle cordinate dello schermo
     SetCoordToPixel(scrW, scrH);
 
+    // disegno le barre dell'interfaccia
     drawFrameBar(fps);
     drawForageBar(forage, MaxForage);
     drawTimeBar(SDL_GetTicks() - startTime, endTime);
 
-    // disegna la minimappa in alto a destra
+    // disegna la minimappa in alto a destra + il raccolto
     drawMinimap(font, forage);
 
     glEnable(GL_DEPTH_TEST);
@@ -221,7 +207,7 @@ void rendering(SDL_Window *win){
 
 
     glFinish();
-    // ho finito: buffer di lavoro diventa visibile
+    // mostro il buffer di lavoro
     SDL_GL_SwapWindow(win);
 }
 
@@ -244,6 +230,7 @@ int main(int argc, char* argv[]) {
     // inizializzazione di SDL
     SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
 
+    // inizializzazione di SDL_TTF
     if(TTF_Init() < 0) {
         fprintf(stderr, "Impossibile inizializzare TTF: %s\n",SDL_GetError());
         SDL_Quit();
@@ -259,24 +246,21 @@ int main(int argc, char* argv[]) {
     // facciamo una finestra di scrW x scrH pixels
     win=SDL_CreateWindow(argv[0], 0, 0, scrW, scrH, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
 
-    //Create our opengl context and attach it to our window
+    // crea il contesto openGL e lo attacca alla finestra
     mainContext=SDL_GL_CreateContext(win);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE); // opengl, per favore, rinormalizza le normali
-    // prima di usarle
-    //glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CW); // consideriamo Front Facing le facce ClockWise
+    glEnable(GL_NORMALIZE);             // opengl rinormalizza le normali
+    glFrontFace(GL_CW);                 // consideriamo Front Facing le facce ClockWise
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_POLYGON_OFFSET_FILL); // caro openGL sposta i
-    // frammenti generati dalla
-    // rasterizzazione poligoni
-    glPolygonOffset(1,1);             // indietro di 1
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    // openGL sposta i frammenti generati dalla rasterizzazione poligoni indietro di 1
+    glPolygonOffset(1,1);
 
-    // textures
+    // carica le textures
     if (!LoadTexture(0,(char *)"img/logo.jpg")) return 0;
     if (!LoadTexture(1,(char *)"img/metal_yellow.jpg")) return 0;
     if (!LoadTexture(2,(char *)"img/sky_ok.jpg")) return -1;
@@ -286,10 +270,11 @@ int main(int argc, char* argv[]) {
     if (!LoadTexture(6,(char *)"img/Corn_ground.jpg")) return -1;
     if (!LoadTexture(7,(char *)"img/lorenzo.jpg")) return -1;
 
+    // carica il font
     if (!(font = TTF_OpenFont ("font/FreeSans.ttf", 22)))
         printf("TTF_OpenFont: %s\n", TTF_GetError());
 
-    // initialize corn diposition
+    // inizializza la matrice del granoturco
     for (int x=0; x<150; x++)
         for (int z=0; z<150; z++)
             if ((50 < z && z < 100) && ((40 < x && x < 65) || (110 > x && x > 85))) {
@@ -301,7 +286,8 @@ int main(int argc, char* argv[]) {
 
 
     bool done=0;
-    startTime = SDL_GetTicks();
+    startTime = SDL_GetTicks();  // tempo di inizio
+    // inizio del ciclo degli eventi
     while (!done) {
 
         SDL_Event e;
@@ -348,11 +334,8 @@ int main(int argc, char* argv[]) {
                 if (e.motion.state & SDL_BUTTON(1) & cameraType==CAMERA_MOUSE) {
                     viewAlpha+=e.motion.xrel;
                     viewBeta +=e.motion.yrel;
-                    //          if (viewBeta<-90) viewBeta=-90;
-                    if (viewBeta<+5) viewBeta=+5; //per non andare sotto la macchina
+                    if (viewBeta<+5) viewBeta=+5;   //per non andare sotto la macchina
                     if (viewBeta>+90) viewBeta=+90;
-                    // redraw(); // richiedi un ridisegno (non c'e' bisongo: si ridisegna gia'
-                    // al ritmo delle computazioni fisiche)
                 }
                 break;
 
@@ -375,34 +358,28 @@ int main(int argc, char* argv[]) {
                     {
                         tractor.controller.Joy(0 , true);
                         tractor.controller.Joy(1 , false);
-                        //	      printf("%d <-3200 \n",e.jaxis.value);
                     }
                     if ( e.jaxis.value > 3200  )
                     {
                         tractor.controller.Joy(0 , false);
                         tractor.controller.Joy(1 , true);
-                        //	      printf("%d >3200 \n",e.jaxis.value);
                     }
                     if ( e.jaxis.value >= -3200 && e.jaxis.value <= 3200 )
                     {
                         tractor.controller.Joy(0 , false);
                         tractor.controller.Joy(1 , false);
-                        //	      printf("%d in [-3200,3200] \n",e.jaxis.value);
                     }
                     rendering(win);
-                    //redraw();
                 }
                 break;
                 case SDL_JOYBUTTONDOWN: /* Handle Joystick Button Presses */
                 if ( e.jbutton.button == 0 )
                 {
                     tractor.controller.Joy(2 , true);
-                    //	   printf("jbutton 0\n");
                 }
                 if ( e.jbutton.button == 2 )
                 {
                     tractor.controller.Joy(3 , true);
-                    //	   printf("jbutton 2\n");
                 }
                 break;
                 case SDL_JOYBUTTONUP: /* Handle Joystick Button Presses */
@@ -413,7 +390,7 @@ int main(int argc, char* argv[]) {
         } else {
             // nessun evento: siamo IDLE
 
-            Uint32 timeNow=SDL_GetTicks(); // che ore sono?
+            Uint32 timeNow=SDL_GetTicks();      // tempo corrente
 
             if (timeLastInterval+fpsSampling<timeNow) {
                 fps = 1000.0*((float)fpsNow) /(timeNow-timeLastInterval);
@@ -437,6 +414,7 @@ int main(int argc, char* argv[]) {
             if (doneSomething)
                 rendering(win);
 
+            // tempo di gioco esaurito
             if (SDL_GetTicks() - startTime > endTime) {
                 done = 0;
                 while (!done) {

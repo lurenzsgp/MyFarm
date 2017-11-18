@@ -33,6 +33,7 @@ Mesh scarecrow_dress((char *)"object/scarecrow_dress.obj");
 Mesh scarecrow_hands((char *)"object/scarecrow_hands.obj");
 Mesh scarecrow_hat((char *)"object/scarecrow_hat.obj");
 
+// disegna una sfera utilizzata per il cielo
 void drawSphere(double r, int lats, int longs) {
     int i, j;
     glPushMatrix();
@@ -62,6 +63,7 @@ void drawSphere(double r, int lats, int longs) {
     glPopMatrix();
 }
 
+// utilizzando drawSphere disegna il cielo
 void drawSky() {
     int H = 100;
 
@@ -74,9 +76,7 @@ void drawSky() {
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
         glColor3f(1,1,1);
         glEnable(GL_LIGHTING);
-    }
-    else
-    {
+    } else {
         glBindTexture(GL_TEXTURE_2D,2);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_TEXTURE_GEN_S);
@@ -96,15 +96,16 @@ void drawSky() {
 
 }
 
+// disegna il terreno e il granoturco
 void drawFloor()
 {
-    const float S=100; // size
-    const float H=0;   // altezza
-    const int K=150; //disegna K x K quads
+    const float S=100;  // size
+    const float H=0;    // altezza
+    const int K=150;    //disegna K x K quads
 
     glColor3f(1,1,1);
     glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, 3);
+    glBindTexture(GL_TEXTURE_2D, 3);    // carica la texture del terreno
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
@@ -112,26 +113,23 @@ void drawFloor()
 
     // disegna KxK quads
     glBegin(GL_QUADS);
-    glNormal3f(0,1,0);       // normale verticale uguale x tutti
+    glNormal3f(0,1,0);                  // normale verticale uguale x tutti
     for (int x=0; x<K; x++)
         for (int z=0; z<K; z++) {
             float x0=-S + 2*(x+0)*S/K;
             float x1=-S + 2*(x+1)*S/K;
             float z0=-S + 2*(z+0)*S/K;
             float z1=-S + 2*(z+1)*S/K;
-            glTexCoord2f(0.0, 0.0);
-            glVertex3d(x0, H, z0);
-            glTexCoord2f(1.0, 0.0);
-            glVertex3d(x1, H, z0);
-            glTexCoord2f(1.0, 1.0);
-            glVertex3d(x1, H, z1);
-            glTexCoord2f(0.0, 1.0);
-            glVertex3d(x0, H, z1);
+            glTexCoord2f(0.0, 0.0); glVertex3d(x0, H, z0);
+            glTexCoord2f(1.0, 0.0); glVertex3d(x1, H, z0);
+            glTexCoord2f(1.0, 1.0); glVertex3d(x1, H, z1);
+            glTexCoord2f(0.0, 1.0); glVertex3d(x0, H, z1);
         }
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
 
+    // disegno il granoturco o il terreno brullo
     for (int x=0; x<K; x++)
         for (int z=0; z<K; z++)
             switch (corn[x][z]) {
@@ -139,13 +137,13 @@ void drawFloor()
                     drawCornBox(-S + 2*x*S/K, 0, -S + 2*z*S/K);
                     break;
                 case 2:
-                    drawCornGround(-S + 2*x*S/K, 0.01, -S + 2*z*S/K);
+                    drawCornGround(-S + 2*x*S/K, 0.01, -S + 2*z*S/K);   // y = 0.01 per evitere z-fighting
                     break;
             }
     glPopMatrix();
 }
 
-
+// disegna la fattoria
 void drawBarn () {
     glPushMatrix();
     glTranslatef(0,0,-60);
@@ -153,20 +151,21 @@ void drawBarn () {
     glColor3f(.647059,.164706,.164706); // brown
     barn_house.RenderNxF();
 
-    glColor3f(.35,.16,.14); // very dark brown
+    glColor3f(.35,.16,.14);             // very dark brown
     barn_frame.RenderNxF();
     barn_roof.RenderNxF();
 
-    glColor3f(.36,.25,.20); // dark brown
+    glColor3f(.36,.25,.20);             // dark brown
     barn_vane.RenderNxF();
 
+    // disegno le finestre trasparenti
     glDisable(GL_LIGHTING);
     // Enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_ALPHA);
-    glColor4f(0,1,1,0.3);
+    glColor4f(0,1,1,0.3);               // cyan
     // glColor3f(0,1,1); // cyan
     barn_window.RenderNxF();
     glDisable(GL_ALPHA);
@@ -176,36 +175,37 @@ void drawBarn () {
     glPopMatrix();
 }
 
+// disegno lo spaventapasseri
 void drawScarecrow () {
     glPushMatrix();
     glTranslatef(7,0,-61);
     glScalef(0.5, .5, .5);
-    glColor3f(.647059,.164706,.164706); // brown
+    glColor3f(.647059,.164706,.164706);     // brown
     scarecrow_base.RenderNxF();
 
-    glColor3f(.73,.16,.96); // med purple
+    glColor3f(.73,.16,.96);                 // med purple
     scarecrow_dress.RenderNxF();
 
-    glColor3f(.858824,.439216,.858824); // Orchid
+    glColor3f(.858824,.439216,.858824);     // Orchid
     scarecrow_hands.RenderNxF();
 
-    glColor3f(.8,.498039,.196078); // Gold
+    glColor3f(.8,.498039,.196078);          // Gold
     scarecrow_hat.RenderNxF();
 
     // disegno la mia faccia sotto al cappello
     glColor3f(1,1,1);
-    glBindTexture(GL_TEXTURE_2D, 7);
+    glBindTexture(GL_TEXTURE_2D, 7);        // carico la texture
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
 
-    glTranslatef(-0.4,3.75,0.1);
+    glTranslatef(-0.4,3.75,0.1);            // la posiziono sotto al cappello
     glBegin(GL_QUADS);
     /* Front. */
     glTexCoord2f(1.0, 1.0); glVertex3f(0.0, 0.0, 0.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(.5, 0.0, 0.0);
-    glTexCoord2f(0.0, 0.0); glVertex3f(.5, .75, 0.0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(0.5, 0.0, 0.0);
+    glTexCoord2f(0.0, 0.0); glVertex3f(0.5, .75, 0.0);
     glTexCoord2f(1.0, 0.0); glVertex3f(0.0, .75, 0.0);
     glEnd();
     glDisable(GL_TEXTURE_2D);
@@ -213,6 +213,7 @@ void drawScarecrow () {
     glPopMatrix();
 }
 
+// disegno la staccionata
 void drawFence () {
     // top
     glPushMatrix();
@@ -254,6 +255,7 @@ void drawFence () {
     glPopMatrix();
 }
 
+// disegna un unita' di granoturco
 void drawCornBox(int pos_x, int pos_y, int pos_z) {
 
     // disegno le faccia laterali di un cubo con la texture Corn_side
@@ -315,6 +317,7 @@ void drawCornBox(int pos_x, int pos_y, int pos_z) {
     glPopMatrix();
 }
 
+// disegna un unita' di terra brulla
 void drawCornGround(int pos_x, float pos_y, int pos_z) {
     glPushMatrix();
     glColor3f(1,1,1);
@@ -326,19 +329,19 @@ void drawCornGround(int pos_x, float pos_y, int pos_z) {
 
     glTranslatef(pos_x,pos_y,pos_z);
 
-    // disegna KxK quads
     glBegin(GL_QUADS);
     glNormal3f(0,1,0);
-    glTexCoord2f(0.0, 0.0);glVertex3d(0, 0, 0);
-    glTexCoord2f(1.0, 0.0);glVertex3d(1.0, 0, 0);
-    glTexCoord2f(1.0, 1.0);glVertex3d(1.0, 0, 1.0);
-    glTexCoord2f(0.0, 1.0);glVertex3d(0, 0, 1.0);
+    glTexCoord2f(0.0, 0.0);glVertex3d(0.0, 0.0, 0.0);
+    glTexCoord2f(1.0, 0.0);glVertex3d(1.0, 0.0, 0.0);
+    glTexCoord2f(1.0, 1.0);glVertex3d(1.0, 0.0, 1.0);
+    glTexCoord2f(0.0, 1.0);glVertex3d(0.0, 0.0, 1.0);
     glEnd();
     glDisable(GL_TEXTURE_2D);
 
     glPopMatrix();
 }
 
+// disegna la schermata finale
 void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, int max) {
     // settiamo il viewport
     glViewport(0,0, scrW, scrH);
@@ -359,6 +362,7 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
 
     sprintf(stringa_punti, "Raccolto: %dKg su %d", f, max);
 
+    // mostra il testo a video
     drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, stringa_punti, scrW/2-115, scrH/2+100, false);
     drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, game_over, scrW/2-90, scrH/3+20, false);
     drawText(font, 255, 255, 255, 255, 0, 0, 0, 255, continuare, scrW/2-120, scrH/4+20, false);
@@ -367,6 +371,7 @@ void finalScreen (SDL_Window *win, TTF_Font *font, int scrH, int scrW, int f, in
     SDL_GL_SwapWindow(win);
 }
 
+// funzione per disegnare il testo a video
 void drawText(TTF_Font *font, // font
     Uint8 fgR, Uint8 fgG, Uint8 fgB, Uint8 fgA, // colore testo
     Uint8 bgR, Uint8 bgG, Uint8 bgB, Uint8 bgA, // colore background
@@ -380,6 +385,7 @@ void drawText(TTF_Font *font, // font
     SDL_Surface *screen;
     uint TextureID = -1;
 
+    // esegue il render del testo
     if(!(text_surface = TTF_RenderText_Shaded(font, text, fontcolor, bgcolor))){
         //handle error here, perhaps print TTF_GetError at least
     } else {
@@ -394,19 +400,20 @@ void drawText(TTF_Font *font, // font
         bmask = 0x00ff0000;
         amask = 0xff000000;
         #endif
-        /* Allochiamo una nuova surface RGB */
+        // Allocha una nuova surface RGB
         screen = SDL_CreateRGBSurface(0, text_surface->w, text_surface->h, 32,rmask, gmask, bmask, amask);
 
-        /* Copiamo il contenuto dalla prima alla seconda surface */
+        // Copia il contenuto dalla prima alla seconda surface
         SDL_BlitSurface(text_surface, 0, screen, 0);
 
-        /* Informiamo GL della nuova texture */
+        // Esegue il binding della nuova texture
         glBindTexture(GL_TEXTURE_2D, TextureID);
         glTexImage2D(GL_TEXTURE_2D, 0, 4, text_surface->w, text_surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, screen->pixels );
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+        // disegna un bordo
         if (border) {
             glLineWidth(2);
             glColor3f(0,0,0);
@@ -418,7 +425,7 @@ void drawText(TTF_Font *font, // font
             glEnd();
         }
 
-        /* prepariamoci al rendering del testo */
+        // prepara il rendering del testo
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, TextureID);
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -430,7 +437,7 @@ void drawText(TTF_Font *font, // font
             glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y + screen->h);
         glEnd();
 
-        /* Clean up */
+        // pulisce le risorse usate
         glDisable(GL_TEXTURE_2D);
         SDL_FreeSurface(text_surface);
         SDL_FreeSurface(screen);
@@ -438,8 +445,9 @@ void drawText(TTF_Font *font, // font
     }
 }
 
+// disegna la minimappa
 void drawMinimap(TTF_Font *font, int u) {
-    /* calcolo delle coordinate reali dell'oggetto su minimappa */
+    // calcola le coordinate reali del trattore su minimappa
     float minimap_posx;
     float minimap_posz;
     minimap_posx = ((50*tractor.px)/67) + 50 + 20;
@@ -448,7 +456,7 @@ void drawMinimap(TTF_Font *font, int u) {
 
     float minimap_cubex, minimap_cubez, pos_x, pos_z;
 
-    /* disegno minimappa */
+    // disegna la minimappa
     glColor3ub(0,0,0);
     glBegin(GL_LINE_LOOP);
     glVertex2d(20,scrH -20 -100);
@@ -465,11 +473,12 @@ void drawMinimap(TTF_Font *font, int u) {
       glVertex2d(120,scrH-20-100);
      glEnd();
 
-    /* disegno del target */
+    // disegna il granoturco rimasto
     glColor3ub(255,0,0);
     for (int x=0; x<150; x++)
         for (int z=0; z<150; z++)
             if (corn[x][z] == 1) {
+                // calcola le coordinate reali del granoturco su minimappa
                 pos_x = -100 + 2*x*100/150;
                 pos_z = -100 + 2*z*100/150;
                 minimap_cubex = ((50*pos_x)/67) + 50 + 20;
@@ -479,7 +488,7 @@ void drawMinimap(TTF_Font *font, int u) {
                 glEnd();
             }
 
-    /* disegno del cursore */
+    // disegna il cursore
     glColor3ub(0,0,255);
     glBegin(GL_QUADS);
     glVertex2d(minimap_posx, minimap_posz + 3);
@@ -490,13 +499,12 @@ void drawMinimap(TTF_Font *font, int u) {
 
     sprintf(point, "Raccolto %dKg", u);
 
-    // scrivo la percentuale di frumento raccolto
+    // stampa a video il raccolto
     drawText(font, 255, 255, 255, 255, 0, 0, 0, 0, point, 140, scrH-20-30, true);
 }
 
 // setta le matrici di trasformazione in modo
-// che le coordinate in spazio oggetto siano le coord
-// del pixel sullo schermo
+// che le coordinate in spazio oggetto siano le coord del pixel sullo schermo
 void  SetCoordToPixel(int scrW, int scrH){
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -506,6 +514,7 @@ void  SetCoordToPixel(int scrW, int scrH){
     glScalef(2.0/scrW, 2.0/scrH, 1);
 }
 
+// disegna la barra degli fps
 void drawFrameBar(float fps) {
     glBegin(GL_QUADS);
     float y=scrH*fps/100;
@@ -518,6 +527,7 @@ void drawFrameBar(float fps) {
     glEnd();
 }
 
+// disegna la barra del raccolto
 void drawForageBar(int forage, int MaxForage) {
     glBegin(GL_QUADS);
     float y=scrH*forage/MaxForage;
@@ -530,6 +540,7 @@ void drawForageBar(int forage, int MaxForage) {
     glEnd();
 }
 
+// disegna la barra del tempo
 void drawTimeBar(int time, int MaxTime) {
     float remainTime = MaxTime - time;
     glBegin(GL_QUADS);
