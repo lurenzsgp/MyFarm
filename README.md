@@ -1,13 +1,13 @@
 # MyFarm
 
-My Farm is a 3D game written in c++ using the OpenGL and ADL libraries in a *nix environment.
+My Farm is a 3D game written in C++ using the OpenGL and ADL libraries in a *nix environment.
 
 ### Installation
 
 Download the file and using a terminal go to the project folder.
-When you are in the forder do `make`.
+When you are in the folder do `make`.
 
-Other information about the project can be retrieved in the /doc/index.hmtl file (only italian).
+Other information about the project can be retrieved in the /doc/index.html file (only Italian).
 
 ### Dependencies
 
